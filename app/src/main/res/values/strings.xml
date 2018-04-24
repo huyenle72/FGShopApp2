@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">FGShopApp</string>
+    <!--Facebook SDK-->
+    <string name="facebook_app_id">166785107458546</string>
+    <string name="fb_login_protocol_scheme">fb166785107458546</string>
+    <!--Google SDK-->
+    <string name="google_plus_app_id">487500096822-uka7sq9db22ajqsq4qc1gmih5qfmb9c7.apps.googleusercontent.com</string>
+    <string name="name_app_uppercase">FGSHOP</string>
+    <string name="slogan">FGShop online easy, secure and fast</string>
 </resources>

@@ -7,4 +7,11 @@
     <string name="google_plus_app_id">487500096822-uka7sq9db22ajqsq4qc1gmih5qfmb9c7.apps.googleusercontent.com</string>
     <string name="name_app_uppercase">FGSHOP</string>
     <string name="slogan">FGShop online easy, secure and fast</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
 </resources>

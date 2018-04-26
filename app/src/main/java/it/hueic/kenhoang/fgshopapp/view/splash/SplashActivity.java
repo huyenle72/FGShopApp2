@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
 
 import it.hueic.kenhoang.fgshopapp.R;
@@ -14,7 +13,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-    private static final int TIME_SLEEP = 5000;
+    private static final int TIME_SLEEP = 1000;
 
     @Override
     protected void attachBaseContext(Context newBase) {

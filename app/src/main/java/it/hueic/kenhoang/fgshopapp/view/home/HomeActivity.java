@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.paperdb.Paper;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.GroupProductTypeAdapter;
 import it.hueic.kenhoang.fgshopapp.common.Common;
@@ -83,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements
                 .setFontAttrId(R.attr.fontPath)
                 .build());
         setContentView(R.layout.activity_home);
+        //Init Paper
+        Paper.init(this);
         //Init View
         initView();
         //Check User != null
@@ -319,6 +323,7 @@ public class HomeActivity extends AppCompatActivity implements
         if (status == 200) {
             Common.CURRENT_USER = null;
             existUser();
+            Paper.book().destroy();
             Utils.showToastShort(getApplicationContext(), "Logout success", MDToast.TYPE_SUCCESS);
         } else if (status == 400) {
             Utils.showToastShort(getApplicationContext(), "Token not exists", MDToast.TYPE_ERROR);

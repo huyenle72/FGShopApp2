@@ -30,7 +30,9 @@ public class Common {
     public static final String CLIENT = "CLIENT";
 
     public static final String BIRTHDATE_DEFAULT = "01/01/1990";
-
+    public static final int DELAY_TIME = 3000;
+    public static final String USERNAME_KEY = "username";
+    public static final String PASSWORD_KEY = "password";
     //DEFAULT ARRAY
     public static String[] TITLE_FRAGMENT_LOGIN = {
             "Sign In",

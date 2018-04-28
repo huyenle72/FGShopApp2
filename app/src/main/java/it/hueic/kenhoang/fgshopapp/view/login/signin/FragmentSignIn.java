@@ -1,10 +1,12 @@
 package it.hueic.kenhoang.fgshopapp.view.login.signin;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -33,6 +35,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import dmax.dialog.SpotsDialog;
+import io.paperdb.Paper;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
@@ -59,6 +63,10 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     ModelLogin modelLogin = new ModelLogin();
+
+    //Alert Dialog
+    AlertDialog waitingDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -68,6 +76,8 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         AppEventsLogger.activateApp(getContext());
         //Init Google
         mGoogleSignInClient = modelLogin.getGoogleSignInClient(getContext());
+        //Init Paper
+        Paper.init(getContext());
         //Facebook
         callbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -93,7 +103,16 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         //InitEvent
         initEvent();
         //hashKeyFacebook();
+        autoLogin();
         return view;
+    }
+
+    private void autoLogin() {
+        String email = Paper.book().read(Common.USERNAME_KEY);
+        String password = Paper.book().read(Common.PASSWORD_KEY);
+        if (email != null & password != null) {
+            if (!email.isEmpty() && !password.isEmpty()) handleLoginWithText(email, password);
+        }
     }
 
     private void initEvent() {
@@ -120,7 +139,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         // Add code to print out the key hash
         try {
             PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-                    "it.hueic.kenhoang.lazada_clone_app",
+                    "it.hueic.kenhoang.fgshopapp",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -134,7 +153,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         }
     }
 
-    // [START onClick]
+
     @Override
     public void onClick(View view) {
         int id = view.getId();
@@ -146,23 +165,35 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
                 signInGoogle();
                 break;
             case R.id.btnLogin:
-                handleLoginWithText();
+                String email = edEmail.getText().toString();
+                String pass = edPass.getText().toString();
+                handleLoginWithText(email, pass);
                 break;
         }
     }
 
-    private void handleLoginWithText() {
-        String email = edEmail.getText().toString();
-        String pass = edPass.getText().toString();
-        PresenterLogicSignIn presenterLogicSignIn = new PresenterLogicSignIn(this);
-        if (!email.trim().equals("") && !pass.trim().equals(""))
-            presenterLogicSignIn.validateLogin(email, pass);
-        else
-            Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), "Please fill full information");
+    private void handleLoginWithText(final String email, final String pass) {
+        showDialog();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                PresenterLogicSignIn presenterLogicSignIn = new PresenterLogicSignIn(FragmentSignIn.this);
+                if (!email.trim().equals("") && !pass.trim().equals(""))
+                    presenterLogicSignIn.validateLogin(email, pass);
+                else
+                    Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), "Please fill full information");
+            }
+        }, Common.DELAY_TIME);
     }
-    // [END onClick]
 
-    // [START onActivityResult]
+    private void showDialog() {
+        waitingDialog = new SpotsDialog(getActivity());
+
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -175,9 +206,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
             modelLogin.handleSignInResult(task, getActivity(), TAG);
         }
     }
-    // [END onActivityResult]
 
-    // [START signIn]
     private void signInGoogle() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -201,7 +230,6 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
                             inputEmail.setErrorEnabled(true);
                             inputEmail.setError("Not an email");
                         }
-
                     }
                 }
                 break;
@@ -218,7 +246,9 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         SharedPreferences.Editor editor = cacheUser.edit();
         editor.putString("USER", json);
         editor.commit();*/
-
+        Paper.book().write(Common.USERNAME_KEY, edEmail.getText().toString());
+        Paper.book().write(Common.PASSWORD_KEY, edPass.getText().toString());
+        waitingDialog.dismiss();
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
@@ -226,7 +256,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
 
     @Override
     public void loginFailed(String msg) {
+        waitingDialog.dismiss();
         Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), msg);
     }
-    // [END signIn]
 }

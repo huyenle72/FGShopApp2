@@ -14,14 +14,25 @@ public class Common {
     public static final String URL_API = URL + "api.php";
     //APIs
     //controller
+    public static final String USER = "User";
     public static final String GROUP_PRODUCT_TYPE = "GroupProductType";
     public static final String BANNER = "Banner";
     //action
     public static final String INDEX = "index";
+    public static final String LOGIN = "login";
+    public static final String LOGOUT = "logout";
+    public static final String REGISTER = "register";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";
     public static final String PARTNER = "PARTNER";
     public static final String CLIENT = "CLIENT";
 
+    public static final String BIRTHDATE_DEFAULT = "01/01/1990";
+
+    //DEFAULT ARRAY
+    public static String[] TITLE_FRAGMENT_LOGIN = {
+            "Sign In",
+            "Sign Up"
+    };
 }

@@ -18,6 +18,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.Task;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.Arrays;
@@ -29,6 +33,7 @@ import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
+import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
@@ -43,6 +48,7 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
         View.OnClickListener,
         View.OnFocusChangeListener{
     private static final String TAG = FragmentSignUp.class.getSimpleName();
+    private static final int RC_SIGN_IN = 9001;
     PresenterLogicLogin presenterLogicLogin;
     EditText edFullname;
     EmailEditTextCustom edEmail;
@@ -51,6 +57,8 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     Button btnRegister, btnFacebook, btnGoogle;
     boolean isValidateRegister = false;
     CallbackManager callbackManager;
+    private GoogleSignInClient mGoogleSignInClient;
+    ModelLogin modelLogin = new ModelLogin();
     //Alert Dialog
     AlertDialog waitingDialog;
 
@@ -61,6 +69,8 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
         //Init Facebook
         FacebookSdk.sdkInitialize(getContext().getApplicationContext());
         AppEventsLogger.activateApp(getContext());
+        //Init Google
+        mGoogleSignInClient = modelLogin.getGoogleSignInClient(getContext());
         //Init Paper
         Paper.init(getContext());
         //Init Presenter
@@ -107,8 +117,14 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
                 LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
                 break;
             case R.id.btnGoogle:
+                signInGoogle();
                 break;
         }
+    }
+
+    private void signInGoogle() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
     private void handleRegister() {
@@ -219,6 +235,13 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            modelLogin.handleSignInResult(task, getActivity(), TAG);
+        }
     }
 
     @Override

@@ -27,6 +27,7 @@ import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +38,9 @@ import it.hueic.kenhoang.fgshopapp.adapter.GroupProductTypeAdapter;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
+import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.home.PresenterLogicHome;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -56,8 +59,9 @@ public class HomeActivity extends AppCompatActivity implements
     private RecyclerView.LayoutManager mLayoutManger;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean statusItemList = false;
-    Menu menu;
     NavigationView navigationView;
+    Menu nav_menu;
+    Menu menu;
     //Presenter
     PresenterLogicHome presenterLogicHome;
     //Slider
@@ -81,8 +85,8 @@ public class HomeActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         //Init View
         initView();
-        //Hide item
-        hideItem();
+        //Check User != null
+        existUser();
         //Init Presenter
         presenterLogicHome = new PresenterLogicHome(this);
         presenterLogicHome.loadBanners();
@@ -104,13 +108,21 @@ public class HomeActivity extends AppCompatActivity implements
 
     }
 
-    private void hideItem() {
-        navigationView = findViewById(R.id.nav_view);
-        Menu nav_menu = navigationView.getMenu();
+    private void existUser() {
         if (Common.CURRENT_USER != null) {
+            if (Common.CURRENT_USER.getAvatar() != null && !Common.CURRENT_USER.getAvatar().equals("null")) {
+                Picasso.with(this)
+                        .load(Common.URL + Common.CURRENT_USER.getAvatar())
+                        .into(profile_image);
+            } else {
+                profile_image.setImageResource(R.drawable.image_null);
+            }
+            tvFullName.setText(Common.CURRENT_USER.getName());
             nav_menu.findItem(R.id.nav_login).setVisible(false);
             nav_menu.findItem(R.id.nav_log_out).setVisible(true);
         } else {
+            profile_image.setImageResource(R.drawable.image_null);
+            tvFullName.setText(getString(R.string.anonymous));
             nav_menu.findItem(R.id.nav_login).setVisible(true);
             nav_menu.findItem(R.id.nav_log_out).setVisible(false);
         }
@@ -140,22 +152,13 @@ public class HomeActivity extends AppCompatActivity implements
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        //Set name for user
+        //FindView Header
         View headerView = navigationView.getHeaderView(0);
         profile_image = headerView.findViewById(R.id.profile_image);
         tvFullName      = headerView.findViewById(R.id.tvFullName);
-        if (Common.CURRENT_USER != null) {
-            if (Common.CURRENT_USER.getAvatar() != null && !Common.CURRENT_USER.getAvatar().equals("null")) {
-                Picasso.with(this)
-                        .load(Common.URL + Common.CURRENT_USER.getAvatar())
-                        .into(profile_image);
-            } else {
-                profile_image.setImageResource(R.drawable.image_null);
-            }
-            tvFullName.setText(Common.CURRENT_USER.getName());
-        }
+        nav_menu = navigationView.getMenu();
         //recycler
         recycler_group_product_type    = findViewById(R.id.recycler_group_product_type);
         mLayoutManger   = new LinearLayoutManager(this);
@@ -218,7 +221,7 @@ public class HomeActivity extends AppCompatActivity implements
                 presenterLogicHome.loadGroupProductTypes();
                 break;
             case R.id.action_search:
-                //startActivity(new Intent(HomeActivity.this, SearchFoodActivity.class));
+                //handle after
                 break;
         }
         //noinspection SimplifiableIfStatement
@@ -255,11 +258,10 @@ public class HomeActivity extends AppCompatActivity implements
                 //handle after
                 break;
             case R.id.nav_change_pass:
-                //Change password
-
+                //handle after
                 break;
             case R.id.nav_log_out:
-
+                presenterLogicHome.logout(Common.CURRENT_USER.getToken());
                 break;
         }
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -310,6 +312,19 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void showError() {
 
+    }
+
+    @Override
+    public void logout(int status) {
+        if (status == 200) {
+            Common.CURRENT_USER = null;
+            existUser();
+            Utils.showToastShort(getApplicationContext(), "Logout success", MDToast.TYPE_SUCCESS);
+        } else if (status == 400) {
+            Utils.showToastShort(getApplicationContext(), "Token not exists", MDToast.TYPE_ERROR);
+        } else if (status == 401) {
+            Utils.showToastShort(getApplicationContext(), "Unauthorized user", MDToast.TYPE_ERROR);
+        }
     }
 
     @Override

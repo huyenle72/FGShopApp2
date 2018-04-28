@@ -33,4 +33,10 @@ public class PresenterLogicHome implements IPresenterHome {
         if (!groupProductTypes.isEmpty())
             view.showGroupProductTypes(groupProductTypes);
     }
+
+    @Override
+    public void logout(String token) {
+        int status = model.logout(token);
+        view.logout(status);
+    }
 }

@@ -70,12 +70,12 @@ public class ParseHelper {
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(data);
-            JSONArray jsonArrayProduct = jsonObject.getJSONArray(Common.GROUP_PRODUCT_TYPE);
+            JSONArray array = jsonObject.getJSONArray(Common.GROUP_PRODUCT_TYPE);
 
             if (status == 200) {
-                int length = jsonArrayProduct.length();
+                int length = array.length();
                 for (int i = 0; i < length; i++) {
-                    JSONObject value = (JSONObject) jsonArrayProduct.get(i);
+                    JSONObject value = (JSONObject) array.get(i);
 
                     GroupProductType object = new GroupProductType();
                     object.setId(value.getInt("id"));
@@ -103,12 +103,12 @@ public class ParseHelper {
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(data);
-            JSONArray jsonArrayProduct = jsonObject.getJSONArray(Common.BANNER);
+            JSONArray array = jsonObject.getJSONArray(Common.BANNER);
 
             if (status == 200) {
-                int length = jsonArrayProduct.length();
+                int length = array.length();
                 for (int i = 0; i < length; i++) {
-                    JSONObject value = (JSONObject) jsonArrayProduct.get(i);
+                    JSONObject value = (JSONObject) array.get(i);
 
                     Banner object = new Banner();
                     object.setId(value.getInt("id"));

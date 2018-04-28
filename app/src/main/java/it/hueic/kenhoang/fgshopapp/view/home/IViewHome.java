@@ -9,4 +9,5 @@ public interface IViewHome {
     void showBanners(List<Banner> banners);
     void showGroupProductTypes(List<GroupProductType> groupProductTypes);
     void showError();
+    void logout(int status);
 }

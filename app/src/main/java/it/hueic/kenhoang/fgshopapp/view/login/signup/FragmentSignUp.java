@@ -224,9 +224,6 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     @Override
     public void loginSuccess(User user) {
         Common.CURRENT_USER = user;
-
-        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
-        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
         if (waitingDialog != null) waitingDialog.dismiss();
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -248,8 +245,6 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
-        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
-        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);

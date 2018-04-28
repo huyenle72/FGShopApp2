@@ -3,6 +3,7 @@ package it.hueic.kenhoang.fgshopapp.model.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -222,6 +223,29 @@ public class ModelLogin {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             if (account != null) {
+                String personName = account.getDisplayName();
+                String personEmail = account.getEmail();
+                String personId = account.getId();
+                Uri personPhoto = account.getPhotoUrl();
+                int status = isExists(personEmail);
+                if (status == 200) {
+                    // Get facebook data from login
+                    User user = new User();
+                    user.setName(personName);
+                    user.setUsername(personEmail);
+                    user.setPassword(personId);
+                    user.setBirthdate(Common.BIRTHDATE_DEFAULT);
+                    user.setPhone("");
+                    user.setGender("MALE");
+                    user.setIdentify_number("");
+                    user.setWallet(0);
+                    user.setIs_social("GOOGLE");
+                    user.setStatus("ACTIVE");
+                    user.setAvatar(personPhoto.toString());
+                    Common.CURRENT_USER = register(user);
+                } else if (status == 400) {
+                    Common.CURRENT_USER = validateLogin(personEmail, personId);
+                }
                 Intent homeIntent = new Intent(activity, HomeActivity.class);
                 homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 activity.startActivity(homeIntent);

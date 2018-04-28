@@ -124,6 +124,8 @@ public class HomeActivity extends AppCompatActivity implements
             tvFullName.setText(Common.CURRENT_USER.getName());
             nav_menu.findItem(R.id.nav_login).setVisible(false);
             nav_menu.findItem(R.id.nav_log_out).setVisible(true);
+            Paper.book().write(Common.USERNAME_KEY, Common.CURRENT_USER.getUsername());
+            Paper.book().write(Common.PASSWORD_KEY, Common.CURRENT_USER.getPassword());
         } else {
             profile_image.setImageResource(R.drawable.image_null);
             tvFullName.setText(getString(R.string.anonymous));

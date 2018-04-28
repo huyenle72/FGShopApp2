@@ -12,6 +12,7 @@ public class Common {
     public static final String SERVER_NAME = "http://10.0.2.2/";
     public static final String URL = SERVER_NAME + "mvc/FGShop/";
     public static final String URL_API = URL + "api.php";
+    public static final String URL_API_TOKEN = Common.URL_API + "?token=";
     //APIs
     //controller
     public static final String USER = "User";

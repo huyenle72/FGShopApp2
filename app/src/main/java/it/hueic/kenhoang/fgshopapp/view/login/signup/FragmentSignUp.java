@@ -3,11 +3,9 @@ package it.hueic.kenhoang.fgshopapp.view.login.signup;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -16,35 +14,43 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
+import com.valdesekamdem.library.mdtoast.MDToast;
+
+import java.util.Arrays;
+
 import dmax.dialog.SpotsDialog;
 import io.paperdb.Paper;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
+import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
 import it.hueic.kenhoang.fgshopapp.object.User;
-import it.hueic.kenhoang.fgshopapp.presenter.login.fragment.signin.PresenterLogicSignIn;
-import it.hueic.kenhoang.fgshopapp.presenter.login.fragment.signup.PresenterLogicSignUp;
+import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
-import it.hueic.kenhoang.fgshopapp.view.login.signin.FragmentSignIn;
+import it.hueic.kenhoang.fgshopapp.view.login.IViewLogin;
 
 /**
  * Created by kenhoang on 02/03/2018.
  */
 
-public class FragmentSignUp extends Fragment implements IViewSignUp,
+public class FragmentSignUp extends Fragment implements IViewLogin,
         View.OnClickListener,
         View.OnFocusChangeListener{
     private static final String TAG = FragmentSignUp.class.getSimpleName();
-    PresenterLogicSignUp presenterLogicSignUp;
+    PresenterLogicLogin presenterLogicLogin;
     EditText edFullname;
     EmailEditTextCustom edEmail;
     PasswordEditTextCustom edPass, edRepass;
     TextInputLayout inputFullName, inputEmail, inputPass, inputRePass;
-    Button btnRegister;
+    Button btnRegister, btnFacebook, btnGoogle;
     boolean isValidateRegister = false;
-
+    CallbackManager callbackManager;
     //Alert Dialog
     AlertDialog waitingDialog;
 
@@ -52,9 +58,31 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
+        //Init Facebook
+        FacebookSdk.sdkInitialize(getContext().getApplicationContext());
+        AppEventsLogger.activateApp(getContext());
         //Init Paper
         Paper.init(getContext());
+        //Init Presenter
+        presenterLogicLogin = new PresenterLogicLogin(this);
         //Init View
+        initView(view);
+        //Facebook
+        callbackManager = CallbackManager.Factory.create();
+        FacebookHelper.validate(callbackManager, presenterLogicLogin);
+
+        btnRegister.setOnClickListener(this);
+        btnFacebook.setOnClickListener(this);
+        btnGoogle.setOnClickListener(this);
+
+        edFullname.setOnFocusChangeListener(this);
+        edEmail.setOnFocusChangeListener(this);
+        edRepass.setOnFocusChangeListener(this);
+
+        return view;
+    }
+
+    private void initView(View view) {
         edFullname = view.findViewById(R.id.edFullName);
         edEmail = view.findViewById(R.id.edEmailAdress);
         edPass = view.findViewById(R.id.edPassword);
@@ -64,16 +92,8 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
         inputPass = view.findViewById(R.id.inputPass);
         inputRePass = view.findViewById(R.id.inputRePass);
         btnRegister = view.findViewById(R.id.btnRegister);
-
-        presenterLogicSignUp = new PresenterLogicSignUp(this);
-
-        btnRegister.setOnClickListener(this);
-
-        edFullname.setOnFocusChangeListener(this);
-        edEmail.setOnFocusChangeListener(this);
-        edRepass.setOnFocusChangeListener(this);
-
-        return view;
+        btnFacebook = view.findViewById(R.id.btnFacebook);
+        btnGoogle = view.findViewById(R.id.btnGoogle);
     }
 
     @Override
@@ -83,45 +103,46 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
             case R.id.btnRegister:
                 handleRegister();
                 break;
+            case R.id.btnFacebook:
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+                break;
+            case R.id.btnGoogle:
+                break;
         }
     }
 
     private void handleRegister() {
-        showDialog();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                String name = edFullname.getText().toString();
-                String email = edEmail.getText().toString();
-                String pass = edPass.getText().toString();
-                String rePass = edRepass.getText().toString();
 
-                if (isValidateRegister) {
-                    if (!rePass.equals(pass)) {
-                        inputRePass.setError("Re-password not same password");
-                        inputRePass.setErrorEnabled(true);
-                    } else {
-                        User user = new User();
+        String name = edFullname.getText().toString();
+        String email = edEmail.getText().toString();
+        String pass = edPass.getText().toString();
+        String rePass = edRepass.getText().toString();
 
-                        user.setName(name);
-                        user.setUsername(email);
-                        user.setPassword(pass);
-                        user.setBirthdate(Common.BIRTHDATE_DEFAULT);
-                        user.setPhone("");
-                        user.setGender("MALE");
-                        user.setIdentify_number("");
-                        user.setWallet(0);
-                        user.setIs_social("NO");
-                        user.setStatus("ACTIVE");
+        if (isValidateRegister) {
+            if (!rePass.equals(pass)) {
+                inputRePass.setError("Re-password not same password");
+                inputRePass.setErrorEnabled(true);
+            } else {
+                showDialog();
+                User user = new User();
 
-                        presenterLogicSignUp.registerUser(user);
-                    }
-                } else {
-                    Log.d(TAG, "handleRegister: Failed" );
-                }
+                user.setName(name);
+                user.setUsername(email);
+                user.setPassword(pass);
+                user.setBirthdate(Common.BIRTHDATE_DEFAULT);
+                user.setPhone("");
+                user.setGender("MALE");
+                user.setIdentify_number("");
+                user.setWallet(0);
+                user.setIs_social("NO");
+                user.setStatus("ACTIVE");
+
+                presenterLogicLogin.registerUser(user);
+                waitingDialog.dismiss();
             }
-        }, Common.DELAY_TIME);
+        } else {
+            Log.d(TAG, "handleRegister: Failed" );
+        }
     }
 
     private void showDialog() {
@@ -195,17 +216,43 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void loginSuccess(User user) {
+        Common.CURRENT_USER = user;
+
+        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
+        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
+        if (waitingDialog != null) waitingDialog.dismiss();
+        Intent homeIntent = new Intent(getContext(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
+        getActivity().finish();
+    }
+
+    @Override
+    public void loginFailed(String msg) {
+        if (waitingDialog != null) waitingDialog.dismiss();
+        Utils.showToastShort(getActivity(), msg, MDToast.TYPE_ERROR);
+    }
+
+    @Override
     public void registerFailed(String message) {
-        Utils.showSnackBarShort(getView().findViewById(R.id.signUpLayoutMain), message);
+        Utils.showToastShort(getActivity(), message, MDToast.TYPE_ERROR);
     }
 
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
-        Paper.book().write(Common.USERNAME_KEY, edEmail.getText().toString());
-        Paper.book().write(Common.PASSWORD_KEY, edPass.getText().toString());
+        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
+        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
+        getActivity().finish();
     }
 }

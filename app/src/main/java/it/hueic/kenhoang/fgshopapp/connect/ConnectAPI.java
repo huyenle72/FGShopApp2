@@ -14,11 +14,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConnectAPI extends AsyncTask<String, Void, String> {
+import it.hueic.kenhoang.fgshopapp.common.Common;
+
+public class ConnectAPI extends AsyncTask<String, Void, ArrayList<String>> {
     String url;
     List<HashMap<String,String>> attrs;
     StringBuilder data;
@@ -36,20 +39,29 @@ public class ConnectAPI extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... strings) {
+    protected ArrayList<String> doInBackground(String... strings) {
+        int status = 404;
         try {
             URL urlParse = new URL(url);
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlParse.openConnection();
+
             if (isMethod)
                 methodGet(httpURLConnection);
             else
                 methodPost(httpURLConnection);
+
+            status = httpURLConnection.getResponseCode();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return data.toString();
+        ArrayList<String> list = new ArrayList<>();
+
+        list.add(data.toString());
+        list.add(String.valueOf(status));
+
+        return list;
     }
 
     private String methodGet(HttpURLConnection httpURLConnection) {

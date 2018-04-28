@@ -1,6 +1,7 @@
 package it.hueic.kenhoang.fgshopapp.view.home;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -24,16 +25,20 @@ import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.GroupProductTypeAdapter;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
 import it.hueic.kenhoang.fgshopapp.presenter.home.PresenterLogicHome;
+import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -46,11 +51,13 @@ public class HomeActivity extends AppCompatActivity implements
     //View
     TextView tvFullName, tvTitle;
     CounterFab fab;
+    CircleImageView profile_image;
     private RecyclerView recycler_group_product_type;
     private RecyclerView.LayoutManager mLayoutManger;
     private SwipeRefreshLayout swipeRefreshLayout;
     private boolean statusItemList = false;
     Menu menu;
+    NavigationView navigationView;
     //Presenter
     PresenterLogicHome presenterLogicHome;
     //Slider
@@ -74,6 +81,8 @@ public class HomeActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_home);
         //Init View
         initView();
+        //Hide item
+        hideItem();
         //Init Presenter
         presenterLogicHome = new PresenterLogicHome(this);
         presenterLogicHome.loadBanners();
@@ -93,6 +102,18 @@ public class HomeActivity extends AppCompatActivity implements
             }
         });
 
+    }
+
+    private void hideItem() {
+        navigationView = findViewById(R.id.nav_view);
+        Menu nav_menu = navigationView.getMenu();
+        if (Common.CURRENT_USER != null) {
+            nav_menu.findItem(R.id.nav_login).setVisible(false);
+            nav_menu.findItem(R.id.nav_log_out).setVisible(true);
+        } else {
+            nav_menu.findItem(R.id.nav_login).setVisible(true);
+            nav_menu.findItem(R.id.nav_log_out).setVisible(false);
+        }
     }
 
     private void initView() {
@@ -123,8 +144,18 @@ public class HomeActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
         //Set name for user
         View headerView = navigationView.getHeaderView(0);
+        profile_image = headerView.findViewById(R.id.profile_image);
         tvFullName      = headerView.findViewById(R.id.tvFullName);
-        tvFullName.setText("Username");
+        if (Common.CURRENT_USER != null) {
+            if (Common.CURRENT_USER.getAvatar() != null && !Common.CURRENT_USER.getAvatar().equals("null")) {
+                Picasso.with(this)
+                        .load(Common.URL + Common.CURRENT_USER.getAvatar())
+                        .into(profile_image);
+            } else {
+                profile_image.setImageResource(R.drawable.image_null);
+            }
+            tvFullName.setText(Common.CURRENT_USER.getName());
+        }
         //recycler
         recycler_group_product_type    = findViewById(R.id.recycler_group_product_type);
         mLayoutManger   = new LinearLayoutManager(this);
@@ -201,8 +232,9 @@ public class HomeActivity extends AppCompatActivity implements
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         switch (id) {
-            case R.id.nav_menu:
-                presenterLogicHome.loadGroupProductTypes();
+            case R.id.nav_login:
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
                 break;
             case R.id.nav_update_name:
                 //handle after
@@ -230,7 +262,7 @@ public class HomeActivity extends AppCompatActivity implements
 
                 break;
         }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

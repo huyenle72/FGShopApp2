@@ -18,6 +18,14 @@
         <item name="textAllCaps">false</item>
     </style>
 
+    <style name="changeColorDrawerToggle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
+    </style>
+
+    <style name="menuItemColor" parent="AppTheme">
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
+        <item name="drawerArrowStyle">@style/changeColorDrawerToggle</item>
+    </style>
     <!--EditText Custom-->
     <declare-styleable name="PasswordEditTextCustom">
         <attr name="useStrike" format="boolean"/>

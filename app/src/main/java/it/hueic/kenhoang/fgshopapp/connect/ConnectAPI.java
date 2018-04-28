@@ -58,7 +58,7 @@ public class ConnectAPI extends AsyncTask<String, Void, ArrayList<String>> {
         }
         ArrayList<String> list = new ArrayList<>();
 
-        list.add(data.toString());
+        list.add(String.valueOf(data));
         list.add(String.valueOf(status));
 
         return list;

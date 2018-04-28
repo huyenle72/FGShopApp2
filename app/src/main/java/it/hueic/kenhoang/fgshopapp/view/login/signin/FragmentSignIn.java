@@ -2,15 +2,11 @@ package it.hueic.kenhoang.fgshopapp.view.login.signin;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -22,6 +18,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
@@ -29,10 +27,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.Task;
-import com.google.gson.Gson;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 import dmax.dialog.SpotsDialog;
@@ -41,11 +42,13 @@ import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
-import it.hueic.kenhoang.fgshopapp.model.signin.ModelLogin;
+import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
+import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
 import it.hueic.kenhoang.fgshopapp.object.User;
-import it.hueic.kenhoang.fgshopapp.presenter.login.fragment.signin.PresenterLogicSignIn;
+import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
+import it.hueic.kenhoang.fgshopapp.view.login.IViewLogin;
 
 /**
  * Created by kenhoang on 02/03/2018.
@@ -53,7 +56,7 @@ import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
 
 public class FragmentSignIn extends Fragment implements View.OnClickListener,
         View.OnFocusChangeListener,
-        IViewSignIn {
+        IViewLogin {
     private static final String TAG = FragmentSignIn.class.getSimpleName();
     private static final int RC_SIGN_IN = 9001;
     Button btnFacebook, btnGoogle, btnLogin;
@@ -63,7 +66,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
     ModelLogin modelLogin = new ModelLogin();
-
+    PresenterLogicLogin presenterLogicLogin;
     //Alert Dialog
     AlertDialog waitingDialog;
 
@@ -78,31 +81,16 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         mGoogleSignInClient = modelLogin.getGoogleSignInClient(getContext());
         //Init Paper
         Paper.init(getContext());
-        //Facebook
-        callbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(homeIntent);
-            }
-
-            @Override
-            public void onCancel() {
-                Log.d(TAG, "onCancel: ");
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-                Log.d(TAG, "onError: ");
-            }
-        });
+        //Init Presenter
+        presenterLogicLogin = new PresenterLogicLogin(this);
         //InitView
         initView(view);
+        //Facebook
+        callbackManager = CallbackManager.Factory.create();
+        FacebookHelper.validate(callbackManager, presenterLogicLogin);
         //InitEvent
         initEvent();
-        //hashKeyFacebook();
+        //Auto
         autoLogin();
         return view;
     }
@@ -135,31 +123,12 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         edPass = view.findViewById(R.id.edPassword);
     }
 
-    private void hashKeyFacebook() {
-        // Add code to print out the key hash
-        try {
-            PackageInfo info = getActivity().getPackageManager().getPackageInfo(
-                    "it.hueic.kenhoang.fgshopapp",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
-    }
-
-
     @Override
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.btnFacebook:
-                LoginManager.getInstance().logInWithReadPermissions(FragmentSignIn.this, Arrays.asList("public_profile", "email"));
+                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
                 break;
             case R.id.btnGoogle:
                 signInGoogle();
@@ -178,9 +147,8 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                PresenterLogicSignIn presenterLogicSignIn = new PresenterLogicSignIn(FragmentSignIn.this);
                 if (!email.trim().equals("") && !pass.trim().equals(""))
-                    presenterLogicSignIn.validateLogin(email, pass);
+                    presenterLogicLogin.validateLogin(email, pass);
                 else
                     Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), "Please fill full information");
             }
@@ -239,24 +207,35 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     @Override
     public void loginSuccess(User user) {
         Common.CURRENT_USER = user;
-      /*  Gson gson = new Gson();
-        String json = gson.toJson(user);*/
 
-       /* SharedPreferences cacheUser = getContext().getSharedPreferences(Common.CHECK_LOGIN_API, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = cacheUser.edit();
-        editor.putString("USER", json);
-        editor.commit();*/
-        Paper.book().write(Common.USERNAME_KEY, edEmail.getText().toString());
-        Paper.book().write(Common.PASSWORD_KEY, edPass.getText().toString());
-        waitingDialog.dismiss();
+        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
+        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
+        if (waitingDialog != null) waitingDialog.dismiss();
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);
+        getActivity().finish();
     }
 
     @Override
     public void loginFailed(String msg) {
         waitingDialog.dismiss();
-        Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), msg);
+        Utils.showToastShort(getActivity(), msg, MDToast.TYPE_ERROR);
+    }
+
+    @Override
+    public void registerFailed(String message) {
+        Utils.showToastShort(getActivity(), message, MDToast.TYPE_ERROR);
+    }
+
+    @Override
+    public void registerSuccess(User user) {
+        Common.CURRENT_USER = user;
+        Paper.book().write(Common.USERNAME_KEY, user.getUsername());
+        Paper.book().write(Common.PASSWORD_KEY, user.getPassword());
+        Intent homeIntent = new Intent(getContext(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
+        getActivity().finish();
     }
 }

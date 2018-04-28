@@ -19,42 +19,46 @@ public class ParseHelper {
      * @param status
      * @return
      */
-    public static User parseUser(String data, int status) {
+    public static User parseUser(String data, int status, String username, String password) {
         User user = new User();
 
+        if(status == 200) {
             try {
                 JSONObject object = new JSONObject(data);
                 JSONArray array = object.getJSONArray(Common.USER);
-                if(status == 200) {
-                    int length = array.length();
-                    for (int i = 0; i < length; i++) {
-                        JSONObject value = array.getJSONObject(i);
-                        user.setToken(value.getString("token"));
-                        user.setRole(value.getString("role"));
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = array.getJSONObject(i);
+                    user.setToken(value.getString("token"));
+                    user.setRole(value.getString("role"));
 
-                        JSONObject data_user = value.getJSONObject("data");
-                        user.setId(data_user.getInt("id"));
-                        user.setName(data_user.getString("name"));
-                        user.setBirthdate(data_user.getString("birthdate"));
-                        user.setPhone(data_user.getString("phone"));
-                        user.setGender(data_user.getString("gender"));
-                        user.setIdentify_number(data_user.getString("identify_number"));
-                        user.setWallet(data_user.getInt("wallet"));
-                        user.setIs_social(data_user.getString("is_social"));
-                        user.setStatus(data_user.getString("status"));
+                    JSONObject data_user = value.getJSONObject("data");
+                    user.setId(data_user.getInt("id"));
+                    user.setName(data_user.getString("name"));
+                    user.setBirthdate(data_user.getString("birthdate"));
+                    user.setPhone(data_user.getString("phone"));
+                    user.setGender(data_user.getString("gender"));
+                    user.setIdentify_number(data_user.getString("identify_number"));
+                    user.setWallet(data_user.getInt("wallet"));
+                    user.setIs_social(data_user.getString("is_social"));
+                    user.setStatus(data_user.getString("status"));
 
-                        JSONObject image = data_user.getJSONObject("image");
-                        user.setAvatar(image.getString("avatar"));
-                        user.setCover(image.getString("cover"));
-                    }
-                } else if (status == 401) {
-                    /* If Login => Unauthorized */
-                    /* If Register => User is exists */
-                    return null;
+                    JSONObject image = data_user.getJSONObject("image");
+                    user.setAvatar(image.getString("avatar"));
+                    user.setCover(image.getString("cover"));
+
+                    user.setUsername(username);
+                    user.setPassword(password);
                 }
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        } else if (status == 401) {
+            /* If Login => Unauthorized */
+            /* If Register => User is exists */
+            user = null;
+        }
         return user;
     }
 

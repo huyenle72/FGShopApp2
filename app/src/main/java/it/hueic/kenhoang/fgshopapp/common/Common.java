@@ -23,6 +23,7 @@ public class Common {
     public static final String LOGIN = "login";
     public static final String LOGOUT = "logout";
     public static final String REGISTER = "register";
+    public static final String EXISTS = "exists";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";

@@ -14,6 +14,7 @@ import com.facebook.appevents.AppEventsLogger;
 
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ViewPagerAdapterLogin;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -43,6 +44,8 @@ public class LoginActivity extends AppCompatActivity {
 
         //InitView
         initView();
+        //KeyHash
+        //Utils.hashKeyFacebook(this);
     }
 
     private void initView() {

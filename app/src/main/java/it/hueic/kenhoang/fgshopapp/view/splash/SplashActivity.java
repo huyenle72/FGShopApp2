@@ -6,8 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import io.paperdb.Paper;
 import it.hueic.kenhoang.fgshopapp.R;
+import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
+import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -30,7 +33,8 @@ public class SplashActivity extends AppCompatActivity {
                 .setFontAttrId(R.attr.fontPath)
                 .build());
         setContentView(R.layout.activity_splash);
-
+        //Init Paper
+        Paper.init(this);
         final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -39,9 +43,19 @@ public class SplashActivity extends AppCompatActivity {
                 } catch (Exception ex) {
 
                 } finally {
-                    Intent homeIntent = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(homeIntent);
-                    finish();
+                    String email = Paper.book().read(Common.USERNAME_KEY);
+                    String password = Paper.book().read(Common.PASSWORD_KEY);
+                    if (email != null & password != null) {
+                        if (!email.isEmpty() && !password.isEmpty()) {
+                            Intent loginIntent = new Intent(SplashActivity.this, LoginActivity.class);
+                            startActivity(loginIntent);
+                            finish();
+                        }
+                    } else {
+                        Intent homeIntent = new Intent(SplashActivity.this, HomeActivity.class);
+                        startActivity(homeIntent);
+                        finish();
+                    }
                 }
             }
         });

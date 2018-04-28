@@ -49,6 +49,8 @@ dependencies {
     implementation 'com.daimajia.slider:library:1.1.5@aar'
     //Progress material design
     implementation 'com.github.d-max:spots-dialog:0.7@aar'
+    //Paper
+    implementation 'io.paperdb:paperdb:2.6'
     //Circle Image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     testImplementation 'junit:junit:4.12'

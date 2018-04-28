@@ -1,7 +1,9 @@
 package it.hueic.kenhoang.fgshopapp.view.login.signup;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
@@ -14,14 +16,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import dmax.dialog.SpotsDialog;
+import io.paperdb.Paper;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.object.User;
+import it.hueic.kenhoang.fgshopapp.presenter.login.fragment.signin.PresenterLogicSignIn;
 import it.hueic.kenhoang.fgshopapp.presenter.login.fragment.signup.PresenterLogicSignUp;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
+import it.hueic.kenhoang.fgshopapp.view.login.signin.FragmentSignIn;
 
 /**
  * Created by kenhoang on 02/03/2018.
@@ -38,12 +44,17 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
     TextInputLayout inputFullName, inputEmail, inputPass, inputRePass;
     Button btnRegister;
     boolean isValidateRegister = false;
+
+    //Alert Dialog
+    AlertDialog waitingDialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sign_up, container, false);
-
-        //InitView
+        //Init Paper
+        Paper.init(getContext());
+        //Init View
         edFullname = view.findViewById(R.id.edFullName);
         edEmail = view.findViewById(R.id.edEmailAdress);
         edPass = view.findViewById(R.id.edPassword);
@@ -76,34 +87,48 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
     }
 
     private void handleRegister() {
-        String name = edFullname.getText().toString();
-        String email = edEmail.getText().toString();
-        String pass = edPass.getText().toString();
-        String rePass = edRepass.getText().toString();
+        showDialog();
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                String name = edFullname.getText().toString();
+                String email = edEmail.getText().toString();
+                String pass = edPass.getText().toString();
+                String rePass = edRepass.getText().toString();
 
-        if (isValidateRegister) {
-            if (!rePass.equals(pass)) {
-                inputRePass.setError("Re-password not same password");
-                inputRePass.setErrorEnabled(true);
-            } else {
-                User user = new User();
+                if (isValidateRegister) {
+                    if (!rePass.equals(pass)) {
+                        inputRePass.setError("Re-password not same password");
+                        inputRePass.setErrorEnabled(true);
+                    } else {
+                        User user = new User();
 
-                user.setName(name);
-                user.setUsername(email);
-                user.setPassword(pass);
-                user.setBirthdate(Common.BIRTHDATE_DEFAULT);
-                user.setPhone("");
-                user.setGender("MALE");
-                user.setIdentify_number("");
-                user.setWallet(0);
-                user.setIs_social("NO");
-                user.setStatus("ACTIVE");
+                        user.setName(name);
+                        user.setUsername(email);
+                        user.setPassword(pass);
+                        user.setBirthdate(Common.BIRTHDATE_DEFAULT);
+                        user.setPhone("");
+                        user.setGender("MALE");
+                        user.setIdentify_number("");
+                        user.setWallet(0);
+                        user.setIs_social("NO");
+                        user.setStatus("ACTIVE");
 
-                presenterLogicSignUp.registerUser(user);
+                        presenterLogicSignUp.registerUser(user);
+                    }
+                } else {
+                    Log.d(TAG, "handleRegister: Failed" );
+                }
             }
-        } else {
-            Log.d(TAG, "handleRegister: Failed" );
-        }
+        }, Common.DELAY_TIME);
+    }
+
+    private void showDialog() {
+        waitingDialog = new SpotsDialog(getActivity());
+
+        waitingDialog.setCancelable(false);
+        waitingDialog.show();
     }
 
     @Override
@@ -177,7 +202,8 @@ public class FragmentSignUp extends Fragment implements IViewSignUp,
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
-
+        Paper.book().write(Common.USERNAME_KEY, edEmail.getText().toString());
+        Paper.book().write(Common.PASSWORD_KEY, edPass.getText().toString());
         Intent homeIntent = new Intent(getContext(), HomeActivity.class);
         homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(homeIntent);

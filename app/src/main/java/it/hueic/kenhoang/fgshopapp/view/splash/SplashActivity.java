@@ -16,7 +16,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class SplashActivity extends AppCompatActivity {
     private static final String TAG = SplashActivity.class.getSimpleName();
-    private static final int TIME_SLEEP = 1000;
+    private static final int TIME_SLEEP = 500;
 
     @Override
     protected void attachBaseContext(Context newBase) {

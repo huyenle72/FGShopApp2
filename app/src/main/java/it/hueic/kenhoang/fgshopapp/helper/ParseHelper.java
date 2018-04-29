@@ -10,6 +10,7 @@ import java.util.List;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
+import it.hueic.kenhoang.fgshopapp.object.ProductType;
 import it.hueic.kenhoang.fgshopapp.object.User;
 
 public class ParseHelper {
@@ -119,6 +120,40 @@ public class ParseHelper {
                     object.setId_product(value.getInt("id_product"));
                     object.setName_product(value.getString("name_product"));
                     object.setImage(value.getString("image"));
+
+                    list.add(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Parse JSON ProductType
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static List<ProductType> parseProductTypes(String data, int status) {
+        ArrayList<ProductType> list = new ArrayList<>();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.PRODUCT_TYPE);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    ProductType object = new ProductType();
+                    object.setId(value.getInt("id"));
+                    object.setName_type(value.getString("name_type"));
+                    object.setImage(value.getString("image"));
+                    object.setId_group(value.getInt("id_group"));
 
                     list.add(object);
                 }

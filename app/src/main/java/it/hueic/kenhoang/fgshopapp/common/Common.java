@@ -17,6 +17,7 @@ public class Common {
     //controller
     public static final String USER = "User";
     public static final String GROUP_PRODUCT_TYPE = "GroupProductType";
+    public static final String PRODUCT_TYPE = "ProductType";
     public static final String BANNER = "Banner";
     //action
     public static final String INDEX = "index";
@@ -24,6 +25,7 @@ public class Common {
     public static final String LOGOUT = "logout";
     public static final String REGISTER = "register";
     public static final String EXISTS = "exists";
+    public static final String GROUP = "group";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";

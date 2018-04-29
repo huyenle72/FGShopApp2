@@ -23,7 +23,9 @@ import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.view.login.IViewLogin;
 
 public class FacebookHelper {
+
     private static final String TAG = FacebookHelper.class.getName();
+
     public static void validate(CallbackManager callbackManager, final PresenterLogicLogin presenterLogicLogin) {
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override

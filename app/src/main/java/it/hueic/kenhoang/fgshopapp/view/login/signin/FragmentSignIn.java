@@ -2,13 +2,11 @@ package it.hueic.kenhoang.fgshopapp.view.login.signin;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,25 +14,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.Task;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 import dmax.dialog.SpotsDialog;
@@ -44,7 +33,7 @@ import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
-import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
+import it.hueic.kenhoang.fgshopapp.helper.GoogleHelper;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
@@ -66,7 +55,6 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     PasswordEditTextCustom edPass;
     CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
-    ModelLogin modelLogin = new ModelLogin();
     PresenterLogicLogin presenterLogicLogin;
     //Alert Dialog
     AlertDialog waitingDialog;
@@ -79,7 +67,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
         FacebookSdk.sdkInitialize(getContext().getApplicationContext());
         AppEventsLogger.activateApp(getContext());
         //Init Google
-        mGoogleSignInClient = modelLogin.getGoogleSignInClient(getContext());
+        mGoogleSignInClient = GoogleHelper.getGoogleSignInClient(getContext());
         //Init Paper
         Paper.init(getContext());
         //Init Presenter
@@ -172,7 +160,7 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            modelLogin.handleSignInResult(task, getActivity(), TAG);
+            GoogleHelper.handleSignInResult(task, getActivity(), presenterLogicLogin);
         }
     }
 

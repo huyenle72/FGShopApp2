@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#00a9f4</color>
     <color name="colorPrimaryDark">#1c92dc</color>
-    <color name="colorAccent">#ff00a6</color>
+    <color name="colorAccent">#e53835</color>
     <color name="colorGray">#CCC</color>
 
     <color name="background_color_blue">#00a9f4</color>
@@ -13,7 +13,7 @@
     <color name="overlayActionBar">#0e0d0e</color>
 
     <!--Button Color-->
-    <color name="btnLogin">#f67122</color>
+    <color name="btnLogin">#e53835</color>
     <color name="colorFacebook">#4a6ea9</color>
     <color name="colorGoogle">#da4835</color>
 

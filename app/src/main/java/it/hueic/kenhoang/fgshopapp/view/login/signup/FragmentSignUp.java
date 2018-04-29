@@ -33,6 +33,7 @@ import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
+import it.hueic.kenhoang.fgshopapp.helper.GoogleHelper;
 import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
@@ -58,7 +59,6 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     boolean isValidateRegister = false;
     CallbackManager callbackManager;
     private GoogleSignInClient mGoogleSignInClient;
-    ModelLogin modelLogin = new ModelLogin();
     //Alert Dialog
     AlertDialog waitingDialog;
 
@@ -70,7 +70,7 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
         FacebookSdk.sdkInitialize(getContext().getApplicationContext());
         AppEventsLogger.activateApp(getContext());
         //Init Google
-        mGoogleSignInClient = modelLogin.getGoogleSignInClient(getContext());
+        mGoogleSignInClient = GoogleHelper.getGoogleSignInClient(getContext());
         //Init Paper
         Paper.init(getContext());
         //Init Presenter
@@ -240,7 +240,7 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            modelLogin.handleSignInResult(task, getActivity(), TAG);
+            GoogleHelper.handleSignInResult(task, getActivity(), presenterLogicLogin);
         }
     }
 

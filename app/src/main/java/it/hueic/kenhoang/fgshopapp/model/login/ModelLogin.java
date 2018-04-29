@@ -37,9 +37,6 @@ public class ModelLogin {
 
     private static final String TAG = ModelLogin.class.getSimpleName();
 
-    AccessToken accessToken;
-    AccessTokenTracker accessTokenTracker;
-
     /**
      * validate_login
      * @param username
@@ -83,6 +80,11 @@ public class ModelLogin {
         return user;
     }
 
+    /**
+     * Register
+     * @param user
+     * @return
+     */
     public User register(User user) {
         User userOrigin = new User();
         String data = "";
@@ -145,6 +147,11 @@ public class ModelLogin {
         return userOrigin;
     }
 
+    /**
+     * Is Exists
+     * @param username
+     * @return
+     */
     public int isExists(String username) {
         int status = 0;
 
@@ -172,136 +179,5 @@ public class ModelLogin {
             e.printStackTrace();
         }
         return status;
-    }
-
-    public AccessToken getCurrentTokenFacebook() {
-        accessTokenTracker = new AccessTokenTracker() {
-            @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                accessToken = currentAccessToken;
-            }
-        };
-        accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken;
-    }
-
-    public void destroyTokenTracker() {
-        accessTokenTracker.stopTracking();
-    }
-
-    // [START getGoogleSignInClient]
-
-    public GoogleSignInClient getGoogleSignInClient(Context context) {
-        GoogleSignInClient mGoogleSignInClient;
-        //Init Google SDK
-        // [START configure_signin]
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        // [END configure_signin]
-        // [START build_client]
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
-        // [END build_client]
-        return mGoogleSignInClient;
-    }
-    // [END getGoogleSignInClient]
-
-    public GoogleSignInAccount getAccountGoogle(Context context) {
-        // [START on_start_sign_in]
-        // Check for existing Google Sign In account, if the user is already signed in
-        // the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(context);
-        // [END on_start_sign_in]
-        return account;
-    }
-
-    // [START handleSignInResult]
-    public void handleSignInResult(Task<GoogleSignInAccount> completedTask, Activity activity, String TAG) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if (account != null) {
-                String personName = account.getDisplayName();
-                String personEmail = account.getEmail();
-                String personId = account.getId();
-                Uri personPhoto = account.getPhotoUrl();
-                int status = isExists(personEmail);
-                if (status == 200) {
-                    // Get facebook data from login
-                    User user = new User();
-                    user.setName(personName);
-                    user.setUsername(personEmail);
-                    user.setPassword(personId);
-                    user.setBirthdate(Common.BIRTHDATE_DEFAULT);
-                    user.setPhone("");
-                    user.setGender("MALE");
-                    user.setIdentify_number("");
-                    user.setWallet(0);
-                    user.setIs_social("GOOGLE");
-                    user.setStatus("ACTIVE");
-                    user.setAvatar(personPhoto.toString());
-                    Common.CURRENT_USER = register(user);
-                } else if (status == 400) {
-                    Common.CURRENT_USER = validateLogin(personEmail, personId);
-                }
-                Intent homeIntent = new Intent(activity, HomeActivity.class);
-                homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                activity.startActivity(homeIntent);
-            }
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-        }
-    }
-    // [END handleSignInResult]
-
-    // [START signOut]
-    public void signOutGoogle(GoogleSignInClient mGoogleSignInClient, Activity activity) {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        updateUI(null);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END signOut]
-
-    public void updateUI(@Nullable GoogleSignInAccount account) {
-        if (account != null) {
-
-        } else {
-
-        }
-    }
-
-    /**
-     * Disconnect Google
-     */
-    // [START revokeAccess]
-    public void revokeAccess(GoogleSignInClient mGoogleSignInClient, Activity activity) {
-        mGoogleSignInClient.revokeAccess()
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        updateUI(null);
-                        // [END_EXCLUDE]
-                    }
-                });
-    }
-    // [END revokeAccess]
-
-    public User getCacheUserIsLogged(Context context) {
-        /*Gson gson = new Gson();
-        SharedPreferences cacheLogin = context.getSharedPreferences(Common.CHECK_LOGIN_API, Context.MODE_PRIVATE);
-        String json = cacheLogin.getString("USER", "");*/
-        User user = null;//gson.fromJson(json, User.class);
-        return user;
     }
 }

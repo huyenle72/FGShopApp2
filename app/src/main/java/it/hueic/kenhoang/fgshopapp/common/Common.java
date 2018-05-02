@@ -18,6 +18,7 @@ public class Common {
     public static final String USER = "User";
     public static final String GROUP_PRODUCT_TYPE = "GroupProductType";
     public static final String PRODUCT_TYPE = "ProductType";
+    public static final String PRODUCT = "Product";
     public static final String BANNER = "Banner";
     //action
     public static final String INDEX = "index";
@@ -26,6 +27,7 @@ public class Common {
     public static final String REGISTER = "register";
     public static final String EXISTS = "exists";
     public static final String GROUP = "group";
+    public static final String DETAIL = "detail";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";
@@ -36,6 +38,7 @@ public class Common {
     public static final int DELAY_TIME = 3000;
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
+
     //DEFAULT ARRAY
     public static String[] TITLE_FRAGMENT_LOGIN = {
             "Sign In",

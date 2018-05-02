@@ -9,7 +9,9 @@ import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
+import it.hueic.kenhoang.fgshopapp.object.Brand;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
+import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
 import it.hueic.kenhoang.fgshopapp.object.User;
 
@@ -162,5 +164,97 @@ public class ParseHelper {
             e.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * Parse JSON Products
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static List<Product> parseProducts(String data, int status) {
+        ArrayList<Product> list = new ArrayList<>();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.PRODUCT);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    Product object = new Product();
+                    object.setId(value.getInt("id"));
+                    object.setName_product(value.getString("name_product"));
+                    object.setPrice(value.getString("price"));
+                    object.setImage(value.getString("image"));
+                    object.setRate(Float.parseFloat(String.valueOf(value.getInt("rate"))));
+                    object.setNum_people_rates(value.getInt("num_people_rates"));
+                    object.setNum_likes(value.getInt("num_likes"));
+
+                    list.add(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Parse JSON Product
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static Product parseProduct(String data, int status) {
+        Product product = new Product();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.PRODUCT);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    product.setId(value.getInt("id"));
+                    product.setName_product(value.getString("name_product"));
+                    product.setPrice(value.getString("price"));
+                    product.setIsbn(value.getString("isbn"));
+                    product.setInfor(value.getString("infor"));
+                    product.setDesc(value.getString("desc"));
+                    product.setStatus(value.getString("status"));
+                    product.setQuanity(value.getInt("quanity"));
+                    product.setImage(value.getString("image"));
+                    product.setRate(Float.parseFloat(String.valueOf(value.getInt("rate"))));
+                    product.setNum_people_rates(value.getInt("num_people_rates"));
+                    product.setNum_likes(value.getInt("num_likes"));
+
+                    JSONObject add_by = value.getJSONObject("add_by");
+                    User user = new User();
+                    user.setId(add_by.getInt("id"));
+                    user.setName(add_by.getString("name"));
+                    user.setAvatar(add_by.getString("avatar"));
+
+                    product.setAdd_by(user);
+
+                    JSONObject brand_object = value.getJSONObject("brand");
+                    Brand brand = new Brand();
+                    brand.setId(brand_object.getInt("id"));
+                    brand.setName_brand(brand_object.getString("name_brand"));
+
+                    product.setBrand(brand);
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return product;
     }
 }

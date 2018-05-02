@@ -2,9 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/background_color_blue"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="gone"
     tools:ignore="MissingPrefix"
     tools:context="it.hueic.kenhoang.fgshopapp.view.splash.SplashActivity">
     <LinearLayout
@@ -20,7 +20,8 @@
             android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="@color/text_color"
-            android:text="@string/name_app_uppercase" />
+            android:text="@string/name_app_uppercase"
+            fontPath="fonts/Arkhip_font.ttf" />
         <TextView
             android:gravity="center"
             android:layout_width="match_parent"

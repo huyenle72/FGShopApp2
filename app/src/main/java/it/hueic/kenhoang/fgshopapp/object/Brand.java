@@ -3,6 +3,7 @@ package it.hueic.kenhoang.fgshopapp.object;
 public class Brand {
     private int id;
     private String name_brand;
+    private String image;
 
     public Brand() {
     }
@@ -21,5 +22,13 @@ public class Brand {
 
     public void setName_brand(String name_brand) {
         this.name_brand = name_brand;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

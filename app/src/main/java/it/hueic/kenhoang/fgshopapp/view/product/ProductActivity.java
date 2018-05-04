@@ -80,7 +80,7 @@ public class ProductActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         //Notes : add this code before setContentView
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/NABILA.TTF")
+                .setDefaultFontPath("fonts/font_main.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
         setContentView(R.layout.activity_product);

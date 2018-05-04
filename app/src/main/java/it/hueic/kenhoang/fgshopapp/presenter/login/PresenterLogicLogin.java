@@ -17,7 +17,7 @@ public class PresenterLogicLogin implements IPresenterLogin{
     @Override
     public void validateLogin(String email, String pass) {
         User user = model.validateLogin(email, pass);
-        if (user == null) view.loginFailed("Login failed!");
+        if (user == null) view.loginFailed("Invalid login!");
         else view.loginSuccess(user);
     }
 

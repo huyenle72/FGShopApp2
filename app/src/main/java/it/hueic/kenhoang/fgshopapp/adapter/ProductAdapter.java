@@ -18,6 +18,7 @@ import it.hueic.kenhoang.fgshopapp.adapter.viewholder.ProductHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.handle.click.IClickItemListener;
 import it.hueic.kenhoang.fgshopapp.object.Product;
+import it.hueic.kenhoang.fgshopapp.view.detail.DetailActivity;
 import it.hueic.kenhoang.fgshopapp.view.product.ProductActivity;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
@@ -70,10 +71,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
         holder.setiClickItemListener(new IClickItemListener() {
             @Override
             public void itemClickListener(View view, int position, boolean isLongClick) {
-                //Start new Activity
-                /*Intent detailIntent = new Intent(context, DetailActivity.class);
+                Intent detailIntent = new Intent(context, DetailActivity.class);
                 detailIntent.putExtra("id_product", list.get(position).getId());
-                context.startActivity(detailIntent);*/
+                context.startActivity(detailIntent);
             }
         });
     }

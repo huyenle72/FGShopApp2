@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         //Notes : add this code before setContentView
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/NABILA.TTF")
+                .setDefaultFontPath("fonts/font_main.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
         setContentView(R.layout.activity_home);
@@ -201,7 +201,7 @@ public class HomeActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
+        // Inflate the menu_detail; this adds items to the action bar if it is present.
         this.menu = menu;
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
@@ -242,8 +242,7 @@ public class HomeActivity extends AppCompatActivity implements
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_login:
-                Intent loginIntent = new Intent(this, LoginActivity.class);
-                startActivity(loginIntent);
+                Utils.openLogin(this);
                 break;
             case R.id.nav_update_name:
                 //handle after

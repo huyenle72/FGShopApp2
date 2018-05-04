@@ -44,4 +44,10 @@ public class Common {
             "Sign In",
             "Sign Up"
     };
+
+    public static String[] TITLE_FRAGMENT_DETAIL = {
+            "Overview",
+            "Ranking",
+            "Detail"
+    };
 }

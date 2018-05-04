@@ -20,7 +20,8 @@
             android:textSize="40sp"
             android:textStyle="bold"
             android:textColor="@color/text_color"
-            android:text="@string/name_app_uppercase" />
+            android:text="@string/name_app_uppercase"
+            fontPath="fonts/Arkhip_font.ttf"/>
         <TextView
             android:gravity="center"
             android:layout_width="match_parent"

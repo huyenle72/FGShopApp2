@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:id="@+id/layoutMainSignIn"
     android:padding="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:ignore="MissingPrefix">
     <android.support.design.widget.TextInputLayout
         android:id="@+id/inputEmail"
         android:layout_margin="10dp"
@@ -16,7 +18,7 @@
             android:text="hoang.duongminh0221@gmail.com"
             android:hint="Email adress"
             android:textColorHint="@android:color/black"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </android.support.design.widget.TextInputLayout>
@@ -29,7 +31,7 @@
             android:id="@+id/edPassword"
             android:text="Ken123"
             android:hint="Password"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:useStrike="true"/>
@@ -52,7 +54,8 @@
         android:textStyle="normal"
         android:background="@color/colorAccent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        fontPath="fonts/Arkhip_font.ttf"/>
 
     <TextView
         android:text="Or sign in with"

@@ -132,7 +132,7 @@ public class ParseHelper {
         return list;
     }
 
-    /**
+    /**xxxx
      * Parse JSON ProductType
      * @param data
      * @param status
@@ -247,6 +247,7 @@ public class ParseHelper {
                     Brand brand = new Brand();
                     brand.setId(brand_object.getInt("id"));
                     brand.setName_brand(brand_object.getString("name_brand"));
+                    brand.setImage(brand_object.getString("image"));
 
                     product.setBrand(brand);
 

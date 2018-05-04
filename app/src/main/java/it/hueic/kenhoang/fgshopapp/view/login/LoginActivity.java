@@ -34,24 +34,21 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //Notes : add this code before setContentView
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Arkhip_font.ttf")
+                .setDefaultFontPath("fonts/font_main.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_login);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
-        setContentView(R.layout.activity_login);
 
         //InitView
         initView();
-        //KeyHash
-        //Utils.hashKeyFacebook(this);
     }
 
     private void initView() {
         setUpToolbar();//Setup toolbar
-        tabLayout = findViewById(R.id.tabLogin);
-        viewPager = findViewById(R.id.viewpagerLogin);
+        tabLayout = findViewById(R.id.tab);
+        viewPager = findViewById(R.id.viewpager);
 
         ViewPagerAdapterLogin viewPagerAdapterLogin = new ViewPagerAdapterLogin(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapterLogin);
@@ -68,6 +65,9 @@ public class LoginActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("FGShop");
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

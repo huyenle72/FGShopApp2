@@ -2,6 +2,7 @@ package it.hueic.kenhoang.fgshopapp.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -14,6 +15,9 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import it.hueic.kenhoang.fgshopapp.common.Common;
+import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 
 public class Utils {
     /** Show MDToast **/
@@ -53,5 +57,17 @@ public class Utils {
         } catch (NoSuchAlgorithmException e) {
 
         }
+    }
+
+    /** Check User Login **/
+    public static boolean isLogin() {
+        if (Common.CURRENT_USER != null) return true;
+        return false;
+    }
+
+    /** Open Activity Login **/
+    public static void openLogin(Activity activity) {
+        Intent loginIntent = new Intent(activity, LoginActivity.class);
+        activity.startActivity(loginIntent);
     }
 }

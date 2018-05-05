@@ -14,17 +14,8 @@
             android:background="@color/overlayBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_margin="10dp"
-                android:rating="0"
-                android:max="5"
-                android:isIndicator="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyle"/>
             <TextView
-                android:id="@+id/food_description"
+                android:id="@+id/description"
                 android:layout_marginTop="12dp"
                 android:lineSpacingMultiplier="1.5"
                 android:padding="12dp"

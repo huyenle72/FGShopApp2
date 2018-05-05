@@ -1,14 +1,14 @@
-package it.hueic.kenhoang.fgshopapp.presenter.detail.overview;
+package it.hueic.kenhoang.fgshopapp.presenter.detail.commom;
 
 import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
-import it.hueic.kenhoang.fgshopapp.view.detail.overview.IViewFragmentOverview;
+import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
 
-public class PresenterLogicOverview implements IPresenterFragmentOverview {
-    IViewFragmentOverview view;
+public class PresenterLogicDetailCommom implements IPresenterDetailCommom {
+    IViewDetailCommom view;
     ModelDetail model;
 
-    public PresenterLogicOverview(IViewFragmentOverview view) {
+    public PresenterLogicDetailCommom(IViewDetailCommom view) {
         this.view = view;
         model = new ModelDetail();
     }

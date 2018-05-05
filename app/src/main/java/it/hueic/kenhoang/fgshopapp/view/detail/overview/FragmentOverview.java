@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +21,12 @@ import java.util.List;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ImageAdapter;
 import it.hueic.kenhoang.fgshopapp.object.Product;
-import it.hueic.kenhoang.fgshopapp.presenter.detail.overview.PresenterLogicOverview;
+import it.hueic.kenhoang.fgshopapp.presenter.detail.commom.PresenterLogicDetailCommom;
+import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
 
 
 public class FragmentOverview extends Fragment implements
-IViewFragmentOverview{
+        IViewDetailCommom {
     private static final String TAG = FragmentOverview.class.getSimpleName();
     RecyclerView recycler_img;
     FrameLayout btnFavorite, btnShare;
@@ -36,7 +36,7 @@ IViewFragmentOverview{
     LinearLayoutManager layoutManager;
     ImageAdapter adapter;
     int id_product = 0;
-    PresenterLogicOverview presenterLogicOverview;
+    PresenterLogicDetailCommom presenterLogicCommom;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,10 +45,10 @@ IViewFragmentOverview{
             id_product = getActivity().getIntent().getIntExtra("id_product", 0);
         }
         //Init Presenter
-        presenterLogicOverview = new PresenterLogicOverview(this);
+        presenterLogicCommom = new PresenterLogicDetailCommom(this);
         //Init View
         initView(view);
-        presenterLogicOverview.fillData(id_product);
+        presenterLogicCommom.fillData(id_product);
         recycler_img.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {

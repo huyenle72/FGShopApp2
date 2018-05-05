@@ -13,6 +13,7 @@ import it.hueic.kenhoang.fgshopapp.object.Brand;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
+import it.hueic.kenhoang.fgshopapp.object.Rate;
 import it.hueic.kenhoang.fgshopapp.object.User;
 
 public class ParseHelper {
@@ -257,5 +258,49 @@ public class ParseHelper {
             e.printStackTrace();
         }
         return product;
+    }
+
+    /**
+     * Parse JSON Rates
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static List<Rate> parseRates(String data, int status) {
+        ArrayList<Rate> list = new ArrayList<>();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.RATING);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    Rate object = new Rate();
+                    object.setId(value.getInt("id"));
+                    object.setId_product(value.getInt("id_product"));
+
+
+                    JSONObject user = value.getJSONObject("user");
+                    User user_object = new User();
+                    user_object.setId(user.getInt("id"));
+                    user_object.setName(user.getString("name"));
+                    user_object.setAvatar(user.getString("avatar"));
+                    object.setUser(user_object);
+
+                    object.setStars(Float.parseFloat(value.getString("stars")));
+                    object.setContent(value.getString("content"));
+                    object.setTime_rate(value.getString("time_rate"));
+
+                    list.add(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

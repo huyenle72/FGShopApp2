@@ -158,7 +158,6 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onPositiveButtonClicked(int stars, String comment) {
         presenterLogicDetail.store(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId(), comment, stars, String.valueOf(Calendar.getInstance().getTimeInMillis()));
-        presenterLogicDetailCommom.fillData(id_product);
     }
 
     @Override
@@ -174,8 +173,10 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void rated(int status) {
         if (status == 401) Utils.showToastShort(this, "Unauthorized!", MDToast.TYPE_ERROR);
-        if (status == 409) Utils.showToastShort(this, "Can't rate, You rated!", MDToast.TYPE_WARNING);
-        if (status == 200) Utils.showToastShort(this, "Thank you rate!", MDToast.TYPE_SUCCESS);
+        if (status == 200) {
+            Utils.showToastShort(this, "Thank you rate!", MDToast.TYPE_SUCCESS);
+            presenterLogicDetailCommom.fillData(id_product);
+        }
     }
 
     @Override

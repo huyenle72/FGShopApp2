@@ -303,4 +303,30 @@ public class ParseHelper {
         }
         return list;
     }
+
+    /**
+     * Parse JSON Favorite
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static String parseFavorite(String data, int status) {
+        String message = "";
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.FAVORITE);
+
+            if (status == 200) {
+                JSONObject value = (JSONObject) array.get(0);
+                message = value.getString("message");
+            } else if (status == 401){
+                message = "Unauthorized";
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
 }

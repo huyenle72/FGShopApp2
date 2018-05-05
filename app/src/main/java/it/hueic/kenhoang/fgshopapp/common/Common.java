@@ -21,6 +21,7 @@ public class Common {
     public static final String PRODUCT = "Product";
     public static final String BANNER = "Banner";
     public static final String RATING = "Rating";
+    public static final String FAVORITE = "Favorite";
     //action
     public static final String INDEX = "index";
     public static final String LOGIN = "login";
@@ -30,6 +31,7 @@ public class Common {
     public static final String GROUP = "group";
     public static final String DETAIL = "detail";
     public static final String STORE = "store";
+    public static final String CHECK = "check";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";

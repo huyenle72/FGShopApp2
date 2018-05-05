@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -20,16 +21,21 @@ import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ImageAdapter;
+import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.presenter.detail.commom.PresenterLogicDetailCommom;
+import it.hueic.kenhoang.fgshopapp.presenter.detail.overview.PresenterLogicOverview;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
 
 
 public class FragmentOverview extends Fragment implements
-        IViewDetailCommom {
+        IViewDetailCommom,
+        IFragmentOverview{
     private static final String TAG = FragmentOverview.class.getSimpleName();
     RecyclerView recycler_img;
     FrameLayout btnFavorite, btnShare;
+    ImageView imgFav;
     TextView tvIndex, name, price, rateNumber, likeNumber;
     RatingBar ratingBar;
     List<String> paths;
@@ -37,6 +43,7 @@ public class FragmentOverview extends Fragment implements
     ImageAdapter adapter;
     int id_product = 0;
     PresenterLogicDetailCommom presenterLogicCommom;
+    PresenterLogicOverview presenterLogicOverview;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -46,9 +53,14 @@ public class FragmentOverview extends Fragment implements
         }
         //Init Presenter
         presenterLogicCommom = new PresenterLogicDetailCommom(this);
+        presenterLogicOverview = new PresenterLogicOverview(this);
         //Init View
         initView(view);
         presenterLogicCommom.fillData(id_product);
+
+        if (Utils.isLogin()) presenterLogicOverview.isFavorite(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId());
+        else presenterLogicOverview.isFavorite("null", id_product, 0);
+
         recycler_img.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -56,6 +68,17 @@ public class FragmentOverview extends Fragment implements
                 int currentFirstVisible = layoutManager.findFirstVisibleItemPosition();
                 if (adapter != null) tvIndex.setText((currentFirstVisible + 1) + "/" + adapter.getItemCount());
                 else tvIndex.setText("0/0");
+            }
+        });
+        btnFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isLogin()) {
+                    presenterLogicOverview.doFavorite(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId());
+                    presenterLogicCommom.fillData(id_product);
+                } else {
+                    Utils.openLogin(getActivity());
+                }
             }
         });
         return view;
@@ -71,6 +94,7 @@ public class FragmentOverview extends Fragment implements
         rateNumber = view.findViewById(R.id.rateNumber);
         likeNumber = view.findViewById(R.id.like);
         ratingBar = view.findViewById(R.id.ratingBar);
+        imgFav = view.findViewById(R.id.imgFav);
 
         layoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
@@ -97,5 +121,14 @@ public class FragmentOverview extends Fragment implements
     @Override
     public void showError(String message) {
 
+    }
+
+    @Override
+    public void isFavorite(String message) {
+        if (message.equals("Favorite")) {
+            imgFav.setImageResource(R.drawable.ic_favorite_black_24dp);
+        } else {
+            imgFav.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        }
     }
 }

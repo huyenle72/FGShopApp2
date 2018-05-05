@@ -156,4 +156,100 @@ public class ModelDetail {
         }
         return status;
     }
+
+    /**
+     * controller: Favorite
+     * action: store
+     * @return
+     */
+    public String favorite(String token, int id_product, int id_user) {
+        String data = "";
+        int status = 0;
+        String message = "";
+
+        List<HashMap<String, String>> attrs = new ArrayList<>();
+
+        HashMap<String, String> attr = new HashMap<>();
+
+        attr.put("controller", Common.FAVORITE);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("action", Common.STORE);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("token", token);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("id_product", String.valueOf(id_product));
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("id_user", String.valueOf(id_user));
+        attrs.add(attr);
+
+        ConnectAPI connect = new ConnectAPI(Common.URL_API, attrs);
+        connect.execute();
+        try {
+            data = connect.get().get(0);
+            Log.d(TAG, "store: ");
+            status = Integer.parseInt(connect.get().get(1));
+            message = ParseHelper.parseFavorite(data, status);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
+
+    /**
+     * controller: Favorite
+     * action: check
+     * @return
+     */
+    public String checkFavorite(String token, int id_product, int id_user) {
+        String data = "";
+        int status = 0;
+        String message = "";
+
+        List<HashMap<String, String>> attrs = new ArrayList<>();
+
+        HashMap<String, String> attr = new HashMap<>();
+
+        attr.put("controller", Common.FAVORITE);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("action", Common.CHECK);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("token", token);
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("id_product", String.valueOf(id_product));
+        attrs.add(attr);
+
+        attr = new HashMap<>();
+        attr.put("id_user", String.valueOf(id_user));
+        attrs.add(attr);
+
+        ConnectAPI connect = new ConnectAPI(Common.URL_API, attrs);
+        connect.execute();
+        try {
+            data = connect.get().get(0);
+            Log.d(TAG, "store: ");
+            status = Integer.parseInt(connect.get().get(1));
+            message = ParseHelper.parseFavorite(data, status);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return message;
+    }
 }

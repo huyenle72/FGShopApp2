@@ -265,9 +265,6 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
-        Intent homeIntent = new Intent(getContext(), HomeActivity.class);
-        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(homeIntent);
         getActivity().finish();
     }
 }

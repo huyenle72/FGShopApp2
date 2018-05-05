@@ -15,6 +15,7 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
@@ -69,5 +70,64 @@ public class Utils {
     public static void openLogin(Activity activity) {
         Intent loginIntent = new Intent(activity, LoginActivity.class);
         activity.startActivity(loginIntent);
+    }
+
+    /** Convert time same facebook **/
+    public static String convertTime(String time_rate) {
+        String timeStamp = "";
+        Calendar calendar = Calendar.getInstance();
+        long tsRate = Long.parseLong(time_rate)/1000;
+        long tsReply = calendar.getTimeInMillis()/1000;
+        long distance = tsReply - tsRate;
+        //Log.d("DISTANCE", String.valueOf(distance));
+        calendar.setTimeInMillis(Long.parseLong(time_rate));
+        int mYear   = calendar.get(Calendar.YEAR);
+        int mMonth  = calendar.get(Calendar.MONTH);
+        int mDay    = calendar.get(Calendar.DAY_OF_MONTH);
+        int mHour   = calendar.get(Calendar.HOUR_OF_DAY);
+        int mMinute = calendar.get(Calendar.MINUTE);
+        String time = (mHour < 10 ? "0" + mHour : mHour) +
+                ":" +
+                (mMinute < 10 ? "0" + mMinute : mMinute);
+        String timeFull = (mDay < 10 ? "0" + mDay : mDay) +
+                "/" +
+                (mMonth < 10 ? "0" + (mMonth + 1) : (mMonth + 1)) +
+                "/" +
+                mYear +
+                " " +
+                (mHour < 10 ? "0" + mHour : mHour) +
+                ":" +
+                (mMinute < 10 ? "0" + mMinute : mMinute);
+        timeStamp  = parseTime(distance, time, timeFull);
+
+        return timeStamp;
+    }
+
+    /**
+     * Parse Time same facebook
+     * @param distance
+     * @param time
+     * @param timeFull
+     * @return
+     */
+    public static String parseTime(long distance, String time, String timeFull) {
+        String result = "";
+        if (distance < 60) result = (distance == 1) ? distance + " second ago." : distance + " seconds ago.";
+        else if (distance >= 60 && distance < 3600) {
+            int minute = Math.round(distance/60);
+            result = (minute == 1) ? minute + " minute ago." : minute + " minutes ago.";
+        }
+        else if (distance >= 3600 && distance < 86400) {
+            int hour = Math.round(distance/3600);
+            result = (hour == 1) ? hour + " hour ago." : hour + " hours ago.";
+        }
+        else if (Math.round(distance/86400) == 1) {
+            result = "Yesterday at " + time;
+        }
+        else {
+            result = timeFull;
+        }
+
+        return result;
     }
 }

@@ -6,37 +6,47 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.stepstone.apprating.AppRatingDialog;
 import com.stepstone.apprating.listener.RatingDialogListener;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ViewPagerAdapterDetail;
-import it.hueic.kenhoang.fgshopapp.adapter.ViewPagerAdapterLogin;
+import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Product;
+import it.hueic.kenhoang.fgshopapp.presenter.detail.PresenterLogicDetail;
+import it.hueic.kenhoang.fgshopapp.presenter.detail.commom.PresenterLogicDetailCommom;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
-import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
+import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class DetailActivity extends AppCompatActivity implements
         IViewDetail,
-        RatingDialogListener{
+        IViewDetailCommom,
+        RatingDialogListener, ElegantNumberButton.OnValueChangeListener {
     private static final String TAG = DetailActivity.class.getSimpleName();
     Toolbar toolbar;
     TabLayout tabLayout;
     ViewPager viewPager;
-
+    TextView price;
+    ElegantNumberButton buttonNumber;
+    PresenterLogicDetailCommom presenterLogicDetailCommom;
+    PresenterLogicDetail presenterLogicDetail;
+    Product current_product;
+    int id_product;
     //Need call this function after you init database firebase
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -50,15 +60,25 @@ public class DetailActivity extends AppCompatActivity implements
                 .setFontAttrId(R.attr.fontPath)
                 .build());
         setContentView(R.layout.activity_detail);//Notes : add this code before setContentView
-
+        if (getIntent() != null) {
+            id_product = getIntent().getIntExtra("id_product", 0);
+        }
         //InitView
         initView();
+        //Init Presenter
+        presenterLogicDetail = new PresenterLogicDetail(this);
+        presenterLogicDetailCommom = new PresenterLogicDetailCommom(this);
+        presenterLogicDetailCommom.fillData(id_product);
+        //Init event
+        buttonNumber.setOnValueChangeListener(this);
     }
 
     private void initView() {
         setUpToolbar();//Setup toolbar
         tabLayout = findViewById(R.id.tab);
         viewPager = findViewById(R.id.viewpager);
+        price = findViewById(R.id.price);
+        buttonNumber = findViewById(R.id.number_button);
 
         ViewPagerAdapterDetail viewPagerAdapterDetail = new ViewPagerAdapterDetail(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapterDetail);
@@ -136,8 +156,9 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onPositiveButtonClicked(int i, String s) {
-
+    public void onPositiveButtonClicked(int stars, String comment) {
+        presenterLogicDetail.store(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId(), comment, stars, String.valueOf(Calendar.getInstance().getTimeInMillis()));
+        presenterLogicDetailCommom.fillData(id_product);
     }
 
     @Override
@@ -148,5 +169,33 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onNeutralButtonClicked() {
 
+    }
+
+    @Override
+    public void rated(int status) {
+        if (status == 401) Utils.showToastShort(this, "Unauthorized!", MDToast.TYPE_ERROR);
+        if (status == 409) Utils.showToastShort(this, "Can't rate, You rated!", MDToast.TYPE_WARNING);
+        if (status == 200) Utils.showToastShort(this, "Thank you rate!", MDToast.TYPE_SUCCESS);
+    }
+
+    @Override
+    public void fillData(Product product) {
+        current_product = product;
+        NumberFormat numberFormat = new DecimalFormat("###,###");
+        price.setText(String.valueOf(numberFormat.format(Integer.valueOf(product.getPrice())) + " VND"));
+    }
+
+    @Override
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void onValueChange(ElegantNumberButton view, int oldValue, int newValue) {
+        if (current_product != null) {
+            int current_price = Integer.parseInt(current_product.getPrice()) * newValue;
+            NumberFormat numberFormat = new DecimalFormat("###,###");
+            price.setText(String.valueOf(numberFormat.format(current_price) + " VND"));
+        }
     }
 }

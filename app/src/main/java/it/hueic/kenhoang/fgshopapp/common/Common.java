@@ -20,6 +20,7 @@ public class Common {
     public static final String PRODUCT_TYPE = "ProductType";
     public static final String PRODUCT = "Product";
     public static final String BANNER = "Banner";
+    public static final String RATING = "Rating";
     //action
     public static final String INDEX = "index";
     public static final String LOGIN = "login";
@@ -28,6 +29,7 @@ public class Common {
     public static final String EXISTS = "exists";
     public static final String GROUP = "group";
     public static final String DETAIL = "detail";
+    public static final String STORE = "store";
 
     //DEFAULT DATA
     public static final String ADMIN = "ADMIN";

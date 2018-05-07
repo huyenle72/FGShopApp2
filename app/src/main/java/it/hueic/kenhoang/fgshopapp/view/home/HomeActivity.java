@@ -95,6 +95,19 @@ public class HomeActivity extends AppCompatActivity implements
         presenterLogicHome = new PresenterLogicHome(this);
         presenterLogicHome.loadBanners();
         presenterLogicHome.loadGroupProductTypes();
+
+        if (Utils.isLogin()) presenterLogicHome.countCart(this, Common.CURRENT_USER.getId());
+        //Event
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils.isLogin()) {
+                    //handle after
+                } else {
+                    Utils.openLogin(HomeActivity.this);
+                }
+            }
+        });
         //Load Data
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -141,16 +154,6 @@ public class HomeActivity extends AppCompatActivity implements
         setSupportActionBar(toolbar);
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //handle after
-            }
-        });
-
-        //handle after
-        fab.setCount(0);
-
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -334,9 +337,14 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void countCart(int count) {
+        fab.setCount(count);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        //fab.setCount(new Database(this).getCountCart(Common.currentUser.getPhone()));
+        if (Utils.isLogin()) presenterLogicHome.countCart(this, Common.CURRENT_USER.getId());
         if (mSlider != null) mSlider.startAutoCycle();
     }
 

@@ -50,7 +50,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.product.ProductActivity" />
-        <activity android:name=".view.detail.DetailActivity"></activity>
+        <activity android:name=".view.detail.DetailActivity" />
+        <activity android:name=".view.cart.CartActivity"></activity>
     </application>
 
 </manifest>

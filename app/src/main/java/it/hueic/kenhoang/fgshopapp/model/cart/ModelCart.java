@@ -2,10 +2,14 @@ package it.hueic.kenhoang.fgshopapp.model.cart;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
+import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
+import it.hueic.kenhoang.fgshopapp.object.Cart;
 import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.Product;
 
 public class ModelCart {
     Context context;
@@ -44,6 +48,28 @@ public class ModelCart {
 
     public int countCart(int id_user) {
         return new DatabaseHelper(context).countCart(id_user);
+    }
+
+    public List<Cart> carts(int id_user) {
+        List<Order> orders = allCart(id_user);
+        List<Cart> carts = new ArrayList<>();
+        ModelDetail modelDetail = new ModelDetail();
+        if (!orders.isEmpty()) {
+            for (Order order: orders) {
+                Cart cart = new Cart();
+                cart.setId_product(order.getId_product());
+                cart.setId_user(order.getId_user());
+                cart.setQuanity(order.getQuanity());
+
+                Product product = modelDetail.findById(order.getId_product());
+                cart.setPrice(product.getPrice());
+                cart.setImage(product.getImage());
+                cart.setTotal(order.getQuanity() * Integer.parseInt(product.getPrice()));
+
+                carts.add(cart);
+            }
+        }
+        return carts;
     }
 
 }

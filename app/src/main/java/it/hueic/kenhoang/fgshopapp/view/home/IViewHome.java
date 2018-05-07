@@ -10,4 +10,5 @@ public interface IViewHome {
     void showGroupProductTypes(List<GroupProductType> groupProductTypes);
     void showError();
     void logout(int status);
+    void countCart(int count);
 }

@@ -1,8 +1,11 @@
 package it.hueic.kenhoang.fgshopapp.presenter.home;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
 import it.hueic.kenhoang.fgshopapp.model.home.ModelHome;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
@@ -38,5 +41,11 @@ public class PresenterLogicHome implements IPresenterHome {
     public void logout(String token) {
         int status = model.logout(token);
         view.logout(status);
+    }
+
+    @Override
+    public void countCart(Context context, int id_user) {
+        ModelCart modelCart = new ModelCart(context);
+        view.countCart(modelCart.countCart(id_user));
     }
 }

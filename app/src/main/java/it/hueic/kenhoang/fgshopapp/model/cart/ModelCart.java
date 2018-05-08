@@ -59,12 +59,13 @@ public class ModelCart {
                 Cart cart = new Cart();
                 cart.setId_product(order.getId_product());
                 cart.setId_user(order.getId_user());
-                cart.setQuanity(order.getQuanity());
+                cart.setQuantity(order.getQuantity());
 
                 Product product = modelDetail.findById(order.getId_product());
+                cart.setName(product.getName_product());
                 cart.setPrice(product.getPrice());
                 cart.setImage(product.getImage());
-                cart.setTotal(order.getQuanity() * Integer.parseInt(product.getPrice()));
+                cart.setTotal(order.getQuantity() * Integer.parseInt(product.getPrice()));
 
                 carts.add(cart);
             }

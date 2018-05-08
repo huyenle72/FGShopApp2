@@ -197,6 +197,9 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     public void loginSuccess(User user) {
         Common.CURRENT_USER = user;
         if (waitingDialog != null) waitingDialog.dismiss();
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
         getActivity().finish();
     }
 

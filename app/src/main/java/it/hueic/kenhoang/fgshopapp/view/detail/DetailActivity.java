@@ -3,6 +3,7 @@ package it.hueic.kenhoang.fgshopapp.view.detail;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
@@ -25,11 +28,14 @@ import java.util.Calendar;
 import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ViewPagerAdapterDetail;
 import it.hueic.kenhoang.fgshopapp.common.Common;
+import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
+import it.hueic.kenhoang.fgshopapp.object.Order;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.presenter.detail.PresenterLogicDetail;
 import it.hueic.kenhoang.fgshopapp.presenter.detail.commom.PresenterLogicDetailCommom;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
+import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -42,11 +48,14 @@ public class DetailActivity extends AppCompatActivity implements
     TabLayout tabLayout;
     ViewPager viewPager;
     TextView price;
+    Button btnCart;
     ElegantNumberButton buttonNumber;
     PresenterLogicDetailCommom presenterLogicDetailCommom;
     PresenterLogicDetail presenterLogicDetail;
     Product current_product;
     int id_product;
+    TextView tvCount;
+    boolean onPause = false;
     //Need call this function after you init database firebase
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -71,6 +80,21 @@ public class DetailActivity extends AppCompatActivity implements
         presenterLogicDetailCommom.fillData(id_product);
         //Init event
         buttonNumber.setOnValueChangeListener(this);
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isLogin()) {
+                    Order order = new Order();
+                    order.setId_user(Common.CURRENT_USER.getId());
+                    order.setId_product(id_product);
+                    order.setQuantity(Integer.parseInt(buttonNumber.getNumber()));
+                    new DatabaseHelper(DetailActivity.this).saveCart(order);
+                    Utils.showToastShort(getApplicationContext(), "Add to cart success!", MDToast.TYPE_SUCCESS);
+                } else {
+                    Utils.openLogin(DetailActivity.this);
+                }
+            }
+        });
     }
 
     private void initView() {
@@ -79,6 +103,7 @@ public class DetailActivity extends AppCompatActivity implements
         viewPager = findViewById(R.id.viewpager);
         price = findViewById(R.id.price);
         buttonNumber = findViewById(R.id.number_button);
+        btnCart = findViewById(R.id.btnCart);
 
         ViewPagerAdapterDetail viewPagerAdapterDetail = new ViewPagerAdapterDetail(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapterDetail);
@@ -109,6 +134,17 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_detail, menu);
+        //Get a reference to your item by id
+        MenuItem item = menu.findItem(R.id.action_cart);
+        View cart_custom = item.getActionView();
+        tvCount = cart_custom.findViewById(R.id.tvCount);
+        cart_custom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.openCart(DetailActivity.this);
+            }
+        });
+        if (Utils.isLogin()) presenterLogicDetail.countCart(this, Common.CURRENT_USER.getId());
         return true;
     }
 
@@ -144,9 +180,6 @@ public class DetailActivity extends AppCompatActivity implements
                     Utils.openLogin(this);
                 }
                 break;
-            case R.id.action_cart:
-                //handle after
-                break;
             case R.id.action_search:
                 //handle after
                 break;
@@ -158,6 +191,7 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onPositiveButtonClicked(int stars, String comment) {
         presenterLogicDetail.store(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId(), comment, stars, String.valueOf(Calendar.getInstance().getTimeInMillis()));
+        presenterLogicDetailCommom.fillData(id_product);
     }
 
     @Override
@@ -180,6 +214,12 @@ public class DetailActivity extends AppCompatActivity implements
     }
 
     @Override
+    public void countCart(int count) {
+        if (count <= 0) tvCount.setVisibility(View.GONE);
+        else tvCount.setText(String.valueOf(count));
+    }
+
+    @Override
     public void fillData(Product product) {
         current_product = product;
         NumberFormat numberFormat = new DecimalFormat("###,###");
@@ -198,5 +238,19 @@ public class DetailActivity extends AppCompatActivity implements
             NumberFormat numberFormat = new DecimalFormat("###,###");
             price.setText(String.valueOf(numberFormat.format(current_price) + " VND"));
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (onPause)
+            if (Utils.isLogin())
+                presenterLogicDetail.countCart(this, Common.CURRENT_USER.getId());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        onPause = true;
     }
 }

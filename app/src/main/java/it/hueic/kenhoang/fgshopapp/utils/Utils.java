@@ -10,7 +10,11 @@ import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.security.MessageDigest;
@@ -18,6 +22,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 
 import it.hueic.kenhoang.fgshopapp.common.Common;
+import it.hueic.kenhoang.fgshopapp.view.cart.CartActivity;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 
 public class Utils {
@@ -34,6 +39,23 @@ public class Utils {
     /** Show snack bar **/
     public static void showSnackBarShort(View view, String msg) {
         Snackbar.make(view, msg, Snackbar.LENGTH_SHORT).show();
+    }
+
+    /** Load image with Picasso **/
+    public static void loadImage(Context context, String path, ImageView target, final ProgressBar progressBar) {
+        Picasso.with(context)
+                .load(Common.URL + path)
+                .into(target, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     /** Show snack bar **/
@@ -70,6 +92,16 @@ public class Utils {
     public static void openLogin(Activity activity) {
         Intent loginIntent = new Intent(activity, LoginActivity.class);
         activity.startActivity(loginIntent);
+    }
+
+    /** Open Activity Cart **/
+    public static void openCart(Activity activity) {
+        if (isLogin()) {
+            Intent cartActivity = new Intent(activity, CartActivity.class);
+            activity.startActivity(cartActivity);
+        } else {
+            openLogin(activity);
+        }
     }
 
     /** Convert time same facebook **/

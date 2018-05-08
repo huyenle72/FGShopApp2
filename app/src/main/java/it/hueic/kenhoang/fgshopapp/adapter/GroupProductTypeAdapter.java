@@ -16,6 +16,7 @@ import it.hueic.kenhoang.fgshopapp.adapter.viewholder.GroupProductTypeHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.handle.click.IClickItemListener;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.product.ProductActivity;
 
 public class GroupProductTypeAdapter extends RecyclerView.Adapter<GroupProductTypeHolder> {
@@ -40,19 +41,9 @@ public class GroupProductTypeAdapter extends RecyclerView.Adapter<GroupProductTy
     public void onBindViewHolder(final GroupProductTypeHolder holder, int position) {
         final GroupProductType object = list.get(position);
         holder.name.setText(object.getName_group());
-        Picasso.with(context)
-                .load(Common.URL + object.getImage())
-                .into(holder.image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.progress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onError() {
+        Utils.loadImage(context, object.getImage(), holder.image, holder.progress);
 
-                    }
-                });
         holder.setiClickItemListener(new IClickItemListener() {
             @Override
             public void itemClickListener(View view, int position, boolean isLongClick) {

@@ -3,8 +3,9 @@ package it.hueic.kenhoang.fgshopapp.object;
 public class Cart {
     private int id_user;
     private int id_product;
+    private String name;
     private String price;
-    private int quanity;
+    private int quantity;
     private int total;
     private String image;
 
@@ -27,6 +28,14 @@ public class Cart {
         this.id_product = id_product;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPrice() {
         return price;
     }
@@ -35,12 +44,12 @@ public class Cart {
         this.price = price;
     }
 
-    public int getQuanity() {
-        return quanity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuanity(int quanity) {
-        this.quanity = quanity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
     public int getTotal() {

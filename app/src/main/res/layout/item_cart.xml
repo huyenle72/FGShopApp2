@@ -37,12 +37,21 @@
         android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/img"
-            android:src="@drawable/image_null"
-            android:scaleType="centerCrop"
+        <FrameLayout
             android:layout_width="70dp"
-            android:layout_height="70dp" />
+            android:layout_height="70dp">
+            <ProgressBar
+                android:id="@+id/progress"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+            <ImageView
+                android:id="@+id/img"
+                android:src="@drawable/image_null"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
         <LinearLayout
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
@@ -55,6 +64,9 @@
                 android:layout_marginLeft="10dp"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
+                android:textSize="16sp"
+                android:maxLines="3"
+                android:ellipsize="end"
                 android:textStyle="bold"
                 android:text="Name"
                 android:layout_width="wrap_content"
@@ -62,8 +74,10 @@
             <TextView
                 android:id="@+id/price"
                 android:layout_marginLeft="10dp"
+                android:textSize="18sp"
                 android:gravity="center_vertical|start"
                 android:textAllCaps="true"
+                android:textColor="@android:color/black"
                 android:textStyle="italic"
                 android:text="100,000"
                 android:layout_width="wrap_content"
@@ -74,8 +88,8 @@
             android:id="@+id/btnQuantity"
             android:layout_gravity="center_vertical"
             android:layout_margin="10dp"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
             app:textSize="8sp"
             app:backGroundColor="@color/colorAccent"
             app:initialNumber="1"

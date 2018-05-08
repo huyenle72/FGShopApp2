@@ -22,4 +22,13 @@ public class PresenterLogicCart implements IPresenterCart {
         List<Cart> carts = model.carts(id_user);
         view.carts(carts);
     }
+
+    @Override
+    public void total(int id_user) {
+        int total = 0;
+        List<Cart> carts = model.carts(id_user);
+        for (Cart cart: carts)
+            total += cart.getTotal();
+        view.total(total);
+    }
 }

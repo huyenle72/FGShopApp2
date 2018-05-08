@@ -101,11 +101,7 @@ public class HomeActivity extends AppCompatActivity implements
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (Utils.isLogin()) {
-                    //handle after
-                } else {
-                    Utils.openLogin(HomeActivity.this);
-                }
+                Utils.openCart(HomeActivity.this);
             }
         });
         //Load Data
@@ -257,7 +253,7 @@ public class HomeActivity extends AppCompatActivity implements
                 //handle after
                 break;
             case R.id.nav_cart:
-                //handle after
+                Utils.openCart(HomeActivity.this);
                 break;
             case R.id.nav_orders:
                 //handle after

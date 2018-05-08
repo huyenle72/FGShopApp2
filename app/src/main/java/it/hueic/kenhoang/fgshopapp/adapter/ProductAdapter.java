@@ -1,5 +1,6 @@
 package it.hueic.kenhoang.fgshopapp.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -17,7 +19,10 @@ import java.util.List;
 import it.hueic.kenhoang.fgshopapp.adapter.viewholder.ProductHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.handle.click.IClickItemListener;
+import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
+import it.hueic.kenhoang.fgshopapp.object.Order;
 import it.hueic.kenhoang.fgshopapp.object.Product;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.DetailActivity;
 import it.hueic.kenhoang.fgshopapp.view.product.ProductActivity;
 
@@ -48,23 +53,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
         holder.ratingBar.setRating(object.getRate());
         holder.rate_number.setText("(" + String.valueOf(object.getNum_people_rates()) + ")");
         holder.like_number.setText(String.valueOf(object.getNum_likes()));
-        Picasso.with(context)
-                .load(Common.URL + object.getImage())
-                .into(holder.image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.progress.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onError() {
+        Utils.loadImage(context, object.getImage(), holder.image, holder.progress);
 
-                    }
-                });
         holder.btn_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //handle after
+                if (Utils.isLogin()) {
+                    Order order = new Order();
+                    order.setId_user(Common.CURRENT_USER.getId());
+                    order.setId_product(object.getId());
+                    order.setQuantity(1);
+                    new DatabaseHelper(context).saveCart(order);
+                    Utils.showToastShort(context, "Add to cart success!", MDToast.TYPE_SUCCESS);
+                } else {
+                    Utils.openLogin((Activity) context);
+                }
             }
         });
 

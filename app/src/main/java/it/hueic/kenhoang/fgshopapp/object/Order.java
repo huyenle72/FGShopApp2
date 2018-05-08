@@ -3,7 +3,7 @@ package it.hueic.kenhoang.fgshopapp.object;
 public class Order {
     private int id_user;
     private int id_product;
-    private int quanity;
+    private int quantity;
 
     public Order() {
     }
@@ -24,11 +24,11 @@ public class Order {
         this.id_product = id_product;
     }
 
-    public int getQuanity() {
-        return quanity;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public void setQuanity(int quanity) {
-        this.quanity = quanity;
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -42,11 +42,10 @@ public class RatingAdapter extends RecyclerView.Adapter<RatingHolder> {
         holder.time.setText(Utils.convertTime(object.getTime_rate()));
         holder.ratingBar.setRating(object.getStars());
         if (object.getUser().getAvatar() != null && !object.getUser().getAvatar().equals("null")) {
-            Picasso.with(context)
-                    .load(Common.URL + object.getUser().getAvatar())
-                    .into(holder.avatar);
+            Utils.loadImage(context, object.getUser().getAvatar(), holder.img, holder.progress);
         } else {
-            holder.avatar.setImageResource(R.drawable.image_null);
+            holder.img.setImageResource(R.drawable.image_null);
+            holder.progress.setVisibility(View.GONE);
         }
     }
 

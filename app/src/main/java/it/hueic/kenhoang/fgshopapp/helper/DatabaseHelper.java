@@ -27,7 +27,7 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = null;
-        String sqlQuery = String.format("SELECT * FROM Cart WHERE id_user = %d AND id_product = %d", id_user, id_product);
+        String sqlQuery = String.format(Locale.getDefault(), "SELECT * FROM Cart WHERE id_user = %d AND id_product = %d", id_user, id_product);
         cursor = db.rawQuery(sqlQuery, null);
 
         if (cursor.getCount() > 0) flag = true;
@@ -51,9 +51,9 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         if (cursor.moveToFirst()) {
             do {
                 Order order = new Order();
-                order.setId_user(cursor.getColumnIndex(sqlSelect[0]));
-                order.setId_product(cursor.getColumnIndex(sqlSelect[1]));
-                order.setQuanity(cursor.getColumnIndex(sqlSelect[2]));
+                order.setId_user(cursor.getInt(cursor.getColumnIndex(sqlSelect[0])));
+                order.setId_product(cursor.getInt(cursor.getColumnIndex(sqlSelect[1])));
+                order.setQuantity(cursor.getInt(cursor.getColumnIndex(sqlSelect[2])));
                 result.add(order);
             } while (cursor.moveToNext());
         }
@@ -64,9 +64,9 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         SQLiteDatabase db = getReadableDatabase();
 
         String query = String.format(Locale.getDefault(), "INSERT OR REPLACE INTO Cart (id_user, id_product, quantity) VALUES (%d, %d, %d);",
+                order.getId_user(),
                 order.getId_product(),
-                order.getId_product(),
-                order.getQuanity());
+                order.getQuantity());
         try {
             db.execSQL(query);
         } catch (Exception ex) {
@@ -76,7 +76,7 @@ public class DatabaseHelper extends SQLiteAssetHelper{
 
     public void updateCart(Order order) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format(Locale.getDefault(), "UPDATE Cart SET quantity = %d WHERE id_user = %d AND id_product = %d", order.getQuanity(), order.getId_user(), order.getId_product());
+        String query = String.format(Locale.getDefault(), "UPDATE Cart SET quantity = %d WHERE id_user = %d AND id_product = %d", order.getQuantity(), order.getId_user(), order.getId_product());
         db.execSQL(query);
     }
 

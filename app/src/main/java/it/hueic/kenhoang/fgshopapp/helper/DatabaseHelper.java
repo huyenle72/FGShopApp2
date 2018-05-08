@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import it.hueic.kenhoang.fgshopapp.object.Cart;
 import it.hueic.kenhoang.fgshopapp.object.Order;
 
 public class DatabaseHelper extends SQLiteAssetHelper{
@@ -67,6 +68,20 @@ public class DatabaseHelper extends SQLiteAssetHelper{
                 order.getId_user(),
                 order.getId_product(),
                 order.getQuantity());
+        try {
+            db.execSQL(query);
+        } catch (Exception ex) {
+            Log.e("ERROR", ex.getMessage());
+        }
+    }
+
+    public void saveCart(Cart cart) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String query = String.format(Locale.getDefault(), "INSERT OR REPLACE INTO Cart (id_user, id_product, quantity) VALUES (%d, %d, %d);",
+                cart.getId_user(),
+                cart.getId_product(),
+                cart.getQuantity());
         try {
             db.execSQL(query);
         } catch (Exception ex) {

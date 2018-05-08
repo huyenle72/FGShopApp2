@@ -30,6 +30,10 @@ public class ModelCart {
         new DatabaseHelper(context).saveCart(order);
     }
 
+    public void saveCart(Cart cart) {
+        new DatabaseHelper(context).saveCart(cart);
+    }
+
     public void updateCart(Order order) {
         new DatabaseHelper(context).updateCart(order);
     }

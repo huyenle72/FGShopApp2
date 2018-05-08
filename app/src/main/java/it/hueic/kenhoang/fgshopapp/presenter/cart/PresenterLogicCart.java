@@ -6,6 +6,7 @@ import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
+import it.hueic.kenhoang.fgshopapp.object.Order;
 import it.hueic.kenhoang.fgshopapp.view.cart.IViewCart;
 
 public class PresenterLogicCart implements IPresenterCart {
@@ -15,6 +16,21 @@ public class PresenterLogicCart implements IPresenterCart {
     public PresenterLogicCart(Context context, IViewCart view) {
         this.view = view;
         model = new ModelCart(context);
+    }
+
+    @Override
+    public void save(Cart cart) {
+        model.saveCart(cart);
+    }
+
+    @Override
+    public void save(Order order) {
+        model.saveCart(order);
+    }
+
+    @Override
+    public void removeIndex(int id_user, int id_product) {
+        model.removeCart(id_user, id_product);
     }
 
     @Override

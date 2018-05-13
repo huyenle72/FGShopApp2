@@ -25,6 +25,7 @@ import java.util.Date;
 
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.view.cart.CartActivity;
+import it.hueic.kenhoang.fgshopapp.view.favorite.FavoriteActivity;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 import it.hueic.kenhoang.fgshopapp.view.order.OrderActivity;
 
@@ -107,11 +108,21 @@ public class Utils {
         }
     }
 
-    /** Open Activity Cart **/
+    /** Open Activity Order **/
     public static void openOrder(Activity activity) {
         if (isLogin()) {
             Intent orderIntent = new Intent(activity, OrderActivity.class);
             activity.startActivity(orderIntent);
+        } else {
+            openLogin(activity);
+        }
+    }
+
+    /** Open Activity Favorite **/
+    public static void openFavorite(Activity activity) {
+        if (isLogin()) {
+            Intent favoriteIntent = new Intent(activity, FavoriteActivity.class);
+            activity.startActivity(favoriteIntent);
         } else {
             openLogin(activity);
         }

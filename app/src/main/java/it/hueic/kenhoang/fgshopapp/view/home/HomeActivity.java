@@ -45,6 +45,7 @@ import it.hueic.kenhoang.fgshopapp.presenter.home.PresenterLogicHome;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.DetailActivity;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
+import okhttp3.internal.Util;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -251,7 +252,7 @@ public class HomeActivity extends AppCompatActivity implements
                 //handle after
                 break;
             case R.id.nav_fav:
-                //handle after
+                Utils.openFavorite(HomeActivity.this);
                 break;
             case R.id.nav_cart:
                 Utils.openCart(HomeActivity.this);

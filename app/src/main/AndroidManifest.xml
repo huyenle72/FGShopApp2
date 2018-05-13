@@ -59,7 +59,8 @@
         <activity android:name=".view.cart.CartActivity" />
         <activity android:name=".view.order.OrderActivity" />
         <activity android:name=".view.checkout.CheckoutActivity" />
-        <activity android:name=".view.orderdetail.OrderDetailActivity"></activity>
+        <activity android:name=".view.orderdetail.OrderDetailActivity" />
+        <activity android:name=".view.favorite.FavoriteActivity"></activity>
     </application>
 
 </manifest>

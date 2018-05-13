@@ -53,6 +53,7 @@ public class DetailActivity extends AppCompatActivity implements
     int id_product;
     TextView tvCount;
     boolean onPause = false;
+    ViewPagerAdapterDetail viewPagerAdapterDetail;
     //Need call this function after you init database firebase
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -102,7 +103,7 @@ public class DetailActivity extends AppCompatActivity implements
         buttonNumber = findViewById(R.id.number_button);
         btnCart = findViewById(R.id.btnCart);
 
-        ViewPagerAdapterDetail viewPagerAdapterDetail = new ViewPagerAdapterDetail(getSupportFragmentManager());
+        viewPagerAdapterDetail = new ViewPagerAdapterDetail(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapterDetail);
         viewPagerAdapterDetail.notifyDataSetChanged();
 
@@ -189,6 +190,7 @@ public class DetailActivity extends AppCompatActivity implements
     public void onPositiveButtonClicked(int stars, String comment) {
         presenterLogicDetail.store(Common.CURRENT_USER.getToken(), id_product, Common.CURRENT_USER.getId(), comment, stars, String.valueOf(Calendar.getInstance().getTimeInMillis()));
         presenterLogicDetailCommom.fillData(id_product);
+        viewPagerAdapterDetail.notifyDataSetChanged();
     }
 
     @Override
@@ -240,6 +242,7 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        viewPagerAdapterDetail.notifyDataSetChanged();
         if (onPause)
             if (Utils.isLogin())
                 presenterLogicDetail.countCart(this, Common.CURRENT_USER.getId());

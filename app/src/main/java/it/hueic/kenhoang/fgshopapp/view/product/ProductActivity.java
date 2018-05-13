@@ -247,4 +247,10 @@ public class ProductActivity extends AppCompatActivity implements
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenterLogicProduct.products(id_product_type);
+    }
 }

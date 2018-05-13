@@ -34,7 +34,6 @@ import it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom;
 import it.hueic.kenhoang.fgshopapp.helper.FacebookHelper;
 import it.hueic.kenhoang.fgshopapp.helper.GoogleHelper;
-import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.login.PresenterLogicLogin;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
@@ -248,6 +247,9 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     public void loginSuccess(User user) {
         Common.CURRENT_USER = user;
         if (waitingDialog != null) waitingDialog.dismiss();
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
         getActivity().finish();
     }
 
@@ -265,6 +267,9 @@ public class FragmentSignUp extends Fragment implements IViewLogin,
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
         getActivity().finish();
     }
 }

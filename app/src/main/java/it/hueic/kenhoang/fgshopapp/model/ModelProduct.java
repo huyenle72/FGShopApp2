@@ -1,4 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.model.product;
+package it.hueic.kenhoang.fgshopapp.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -217,6 +217,9 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
     @Override
     public void registerSuccess(User user) {
         Common.CURRENT_USER = user;
+        Intent homeIntent = new Intent(getActivity(), HomeActivity.class);
+        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(homeIntent);
         getActivity().finish();
     }
 }

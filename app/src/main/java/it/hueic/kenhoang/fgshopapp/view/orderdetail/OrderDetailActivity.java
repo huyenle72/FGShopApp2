@@ -1,4 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.view.order;
+package it.hueic.kenhoang.fgshopapp.view.orderdetail;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,27 +9,29 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.R;
-import it.hueic.kenhoang.fgshopapp.adapter.CartAdapter;
 import it.hueic.kenhoang.fgshopapp.adapter.OrderAdapter;
+import it.hueic.kenhoang.fgshopapp.adapter.OrderDetailAdapter;
 import it.hueic.kenhoang.fgshopapp.common.Common;
-import it.hueic.kenhoang.fgshopapp.object.Order;
-import it.hueic.kenhoang.fgshopapp.presenter.order.IPresenterOrder;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.presenter.order.PresenterLogicOrder;
-import it.hueic.kenhoang.fgshopapp.view.checkout.CheckoutActivity;
+import it.hueic.kenhoang.fgshopapp.presenter.orderdetail.PresenterLogicOrderDetail;
+import it.hueic.kenhoang.fgshopapp.view.order.OrderActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class OrderActivity extends AppCompatActivity implements
-        IViewOrder{
-    private static final String TAG = OrderActivity.class.getSimpleName();
-    RecyclerView recycler_order;
-    OrderAdapter adapter;
+public class OrderDetailActivity extends AppCompatActivity implements
+        IViewOrderDetail {
+    private static final String TAG = OrderDetailActivity.class.getSimpleName();
+    RecyclerView recycler_order_detail;
+    OrderDetailAdapter adapter;
     RecyclerView.LayoutManager mLayoutManager;
-    PresenterLogicOrder presenterLogicOrder;
-
+    PresenterLogicOrderDetail presenterLogicOrderDetail;
+    int id_order = 0;
     //Need call this function after you init database
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -38,25 +40,28 @@ public class OrderActivity extends AppCompatActivity implements
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);//Notes : add this code before setContentView
+        super.onCreate(savedInstanceState);
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/font_main.otf")
                 .setFontAttrId(R.attr.fontPath)
                 .build());
-        setContentView(R.layout.activity_order);
+        setContentView(R.layout.activity_order_detail);
+        if (getIntent() != null) {
+            id_order = getIntent().getIntExtra("id_order", 0);
+        }
         //InitView
         initView();
         //InitPresenter
-        presenterLogicOrder = new PresenterLogicOrder(this);
-        presenterLogicOrder.orders(Common.CURRENT_USER.getToken(), Common.CURRENT_USER.getId());
+        presenterLogicOrderDetail = new PresenterLogicOrderDetail(this);
+        presenterLogicOrderDetail.orderDetails(Common.CURRENT_USER.getToken(), id_order);
     }
 
     private void initView() {
         setUpToolbar();
-        recycler_order = findViewById(R.id.recycler_order);
-        recycler_order.setHasFixedSize(true);
+        recycler_order_detail = findViewById(R.id.recycler_order_detail);
+        recycler_order_detail.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
-        recycler_order.setLayoutManager(mLayoutManager);
+        recycler_order_detail.setLayoutManager(mLayoutManager);
     }
 
     /**
@@ -67,7 +72,7 @@ public class OrderActivity extends AppCompatActivity implements
         toolbar.setTitleTextColor(Color.WHITE);
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("FGShop Order");
+        getSupportActionBar().setTitle("FGShop Order Detail");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -79,15 +84,18 @@ public class OrderActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void orders(List<Order> orders) {
-        adapter = new OrderAdapter(this, orders, R.layout.item_order);
-        recycler_order.setAdapter(adapter);
+    public void orderDetails(List<OrderDetail> orderDetails, int total) {
+        adapter = new OrderDetailAdapter(this, orderDetails, R.layout.item_order_detail);
+        recycler_order_detail.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        final NumberFormat numberFormat = new DecimalFormat("###,###");
+        getSupportActionBar().setTitle(String.valueOf(numberFormat.format(total) + " VND"));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        presenterLogicOrder.orders(Common.CURRENT_USER.getToken(), Common.CURRENT_USER.getId());
+
+        presenterLogicOrderDetail.orderDetails(Common.CURRENT_USER.getToken(), id_order);
     }
 }

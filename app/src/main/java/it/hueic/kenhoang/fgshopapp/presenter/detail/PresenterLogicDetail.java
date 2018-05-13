@@ -2,9 +2,8 @@ package it.hueic.kenhoang.fgshopapp.presenter.detail;
 
 import android.content.Context;
 
-import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
-import it.hueic.kenhoang.fgshopapp.object.Product;
+import it.hueic.kenhoang.fgshopapp.model.ModelCart;
+import it.hueic.kenhoang.fgshopapp.model.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.view.detail.IViewDetail;
 
 public class PresenterLogicDetail implements IPresenterDetail{

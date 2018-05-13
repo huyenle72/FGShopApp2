@@ -11,6 +11,8 @@ import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.Brand;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
+import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
 import it.hueic.kenhoang.fgshopapp.object.Rate;
@@ -331,7 +333,7 @@ public class ParseHelper {
     }
 
     /**
-     * Parse JSON Oreder
+     * Parse JSON Order
      * @param data
      * @param status
      * @return
@@ -354,5 +356,76 @@ public class ParseHelper {
             e.printStackTrace();
         }
         return id;
+    }
+
+    /**
+     * Parse JSON Order
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static ArrayList<Order> parseOrders(String data, int status) {
+        ArrayList<Order> list = new ArrayList<>();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.ORDER);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    Order object = new Order();
+                    object.setId(value.getInt("id"));
+                    object.setId_user(value.getInt("id_user"));
+                    object.setStatus(value.getString("status"));
+                    object.setPhone(value.getString("phone"));
+                    object.setDelivery_address(value.getString("delivery_address"));
+                    object.setDelivery_date(value.getString("delivery_date"));
+                    object.setOrder_date(value.getString("order_date"));
+                    object.setDesc(value.getString("desc"));
+
+                    list.add(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    /**
+     * Parse JSON Order
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static ArrayList<OrderDetail> parseOrderDetails(String data, int status) {
+        ArrayList<OrderDetail> list = new ArrayList<>();
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.ORDER);
+
+            if (status == 200) {
+                int length = array.length();
+                for (int i = 0; i < length; i++) {
+                    JSONObject value = (JSONObject) array.get(i);
+
+                    OrderDetail object = new OrderDetail();
+                    object.setId_order(value.getInt("id_order"));
+                    object.setId_product(value.getInt("id_product"));
+                    object.setQuantity(value.getInt("quanity"));
+
+                    list.add(object);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

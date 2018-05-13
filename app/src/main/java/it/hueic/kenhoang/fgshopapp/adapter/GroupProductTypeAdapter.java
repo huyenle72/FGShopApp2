@@ -48,10 +48,10 @@ public class GroupProductTypeAdapter extends RecyclerView.Adapter<GroupProductTy
             @Override
             public void itemClickListener(View view, int position, boolean isLongClick) {
                 //Start new Activity
-                Intent productItent = new Intent(context, ProductActivity.class);
-                productItent.putExtra("title", list.get(position).getName_group());
-                productItent.putExtra("id_group", list.get(position).getId()); //Send Group Id to new activity
-                context.startActivity(productItent);
+                Intent productIntent = new Intent(context, ProductActivity.class);
+                productIntent.putExtra("title", list.get(position).getName_group());
+                productIntent.putExtra("id_group", list.get(position).getId()); //Send Group Id to new activity
+                context.startActivity(productIntent);
             }
         });
     }

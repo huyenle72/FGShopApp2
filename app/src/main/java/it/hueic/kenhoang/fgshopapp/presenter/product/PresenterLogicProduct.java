@@ -3,10 +3,9 @@ package it.hueic.kenhoang.fgshopapp.presenter.product;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import it.hueic.kenhoang.fgshopapp.model.product.ModelProduct;
+import it.hueic.kenhoang.fgshopapp.model.ModelProduct;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
 import it.hueic.kenhoang.fgshopapp.view.product.IViewProduct;

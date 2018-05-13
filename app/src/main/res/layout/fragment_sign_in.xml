@@ -15,7 +15,6 @@
         android:layout_height="wrap_content">
         <it.hueic.kenhoang.fgshopapp.custom.EmailEditTextCustom
             android:id="@+id/edEmail"
-            android:text="hoang.duongminh0221@gmail.com"
             android:hint="Email adress"
             android:textColorHint="@android:color/black"
             android:textColor="@android:color/black"
@@ -29,7 +28,6 @@
         android:layout_height="wrap_content">
         <it.hueic.kenhoang.fgshopapp.custom.PasswordEditTextCustom
             android:id="@+id/edPassword"
-            android:text="Ken123"
             android:hint="Password"
             android:textColor="@android:color/black"
             android:layout_width="match_parent"

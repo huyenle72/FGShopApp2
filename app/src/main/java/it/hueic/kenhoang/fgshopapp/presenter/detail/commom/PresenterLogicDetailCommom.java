@@ -1,6 +1,6 @@
 package it.hueic.kenhoang.fgshopapp.presenter.detail.commom;
 
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
+import it.hueic.kenhoang.fgshopapp.model.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
 

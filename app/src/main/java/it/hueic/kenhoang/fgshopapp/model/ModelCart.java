@@ -1,4 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.model.cart;
+package it.hueic.kenhoang.fgshopapp.model;
 
 import android.content.Context;
 
@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
 import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;

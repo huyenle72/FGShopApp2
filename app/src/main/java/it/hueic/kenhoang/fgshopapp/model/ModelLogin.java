@@ -1,22 +1,6 @@
-package it.hueic.kenhoang.fgshopapp.model.login;
+package it.hueic.kenhoang.fgshopapp.model;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.facebook.AccessToken;
-import com.facebook.AccessTokenTracker;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,7 +11,6 @@ import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.connect.ConnectAPI;
 import it.hueic.kenhoang.fgshopapp.helper.ParseHelper;
 import it.hueic.kenhoang.fgshopapp.object.User;
-import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
 
 /**
  * Created by kenhoang on 03/03/2018.

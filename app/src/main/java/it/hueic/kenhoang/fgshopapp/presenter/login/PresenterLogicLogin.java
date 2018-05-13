@@ -1,6 +1,6 @@
 package it.hueic.kenhoang.fgshopapp.presenter.login;
 
-import it.hueic.kenhoang.fgshopapp.model.login.ModelLogin;
+import it.hueic.kenhoang.fgshopapp.model.ModelLogin;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.view.login.IViewLogin;
 

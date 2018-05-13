@@ -1,6 +1,6 @@
 package it.hueic.kenhoang.fgshopapp.presenter.detail.overview;
 
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
+import it.hueic.kenhoang.fgshopapp.model.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.view.detail.overview.IFragmentOverview;
 
 public class PresenterLogicOverview implements IPresenterOverview {

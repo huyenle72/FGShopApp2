@@ -26,6 +26,7 @@ import java.util.Date;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.view.cart.CartActivity;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
+import it.hueic.kenhoang.fgshopapp.view.order.OrderActivity;
 
 public class Utils {
     /** Show MDToast **/
@@ -101,6 +102,16 @@ public class Utils {
         if (isLogin()) {
             Intent cartActivity = new Intent(activity, CartActivity.class);
             activity.startActivity(cartActivity);
+        } else {
+            openLogin(activity);
+        }
+    }
+
+    /** Open Activity Cart **/
+    public static void openOrder(Activity activity) {
+        if (isLogin()) {
+            Intent orderIntent = new Intent(activity, OrderActivity.class);
+            activity.startActivity(orderIntent);
         } else {
             openLogin(activity);
         }

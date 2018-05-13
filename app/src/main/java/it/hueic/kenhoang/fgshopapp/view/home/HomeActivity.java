@@ -43,6 +43,7 @@ import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
 import it.hueic.kenhoang.fgshopapp.object.User;
 import it.hueic.kenhoang.fgshopapp.presenter.home.PresenterLogicHome;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
+import it.hueic.kenhoang.fgshopapp.view.detail.DetailActivity;
 import it.hueic.kenhoang.fgshopapp.view.login.LoginActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -256,7 +257,7 @@ public class HomeActivity extends AppCompatActivity implements
                 Utils.openCart(HomeActivity.this);
                 break;
             case R.id.nav_orders:
-                //handle after
+                Utils.openOrder(HomeActivity.this);
                 break;
             case R.id.nav_setting:
                 //handle after
@@ -276,7 +277,7 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void showBanners(List<Banner> banners) {
         image_list = new HashMap<>();
-        for (Banner banner: banners) {
+        for (final Banner banner: banners) {
             //Create Slider
             final TextSliderView textSliderView = new TextSliderView(getBaseContext());
             textSliderView
@@ -286,12 +287,14 @@ public class HomeActivity extends AppCompatActivity implements
                     .setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                         @Override
                         public void onSliderClick(BaseSliderView slider) {
-                            //handle after
+                            Intent detailIntent = new Intent(HomeActivity.this, DetailActivity.class);
+                            detailIntent.putExtra("id_product", banner.getId_product());
+                            startActivity(detailIntent);
                         }
                     });
             //Add extra bundle
             textSliderView.bundle(new Bundle());
-            textSliderView.getBundle().putInt("ID", banner.getId_product()); //handle after
+            textSliderView.getBundle().putInt("id_product", banner.getId_product()); //handle after
             mSlider.addSlider(textSliderView);
         }
 

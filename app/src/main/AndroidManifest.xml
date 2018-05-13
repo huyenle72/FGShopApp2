@@ -34,7 +34,6 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_places_api_key" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -58,8 +57,9 @@
         <activity android:name=".view.product.ProductActivity" />
         <activity android:name=".view.detail.DetailActivity" />
         <activity android:name=".view.cart.CartActivity" />
-        <activity android:name=".view.orderDetail.OrderActivity" />
-        <activity android:name=".view.checkout.CheckoutActivity"></activity>
+        <activity android:name=".view.order.OrderActivity" />
+        <activity android:name=".view.checkout.CheckoutActivity" />
+        <activity android:name=".view.orderdetail.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

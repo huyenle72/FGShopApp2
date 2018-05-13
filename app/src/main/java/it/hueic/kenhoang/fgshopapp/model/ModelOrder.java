@@ -1,6 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.model.checkout;
-
-import android.util.Log;
+package it.hueic.kenhoang.fgshopapp.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,21 +8,21 @@ import java.util.concurrent.ExecutionException;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.connect.ConnectAPI;
 import it.hueic.kenhoang.fgshopapp.helper.ParseHelper;
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
+import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
+import it.hueic.kenhoang.fgshopapp.object.ProductType;
 
-public class ModelCheckout {
-
-    private static final String TAG = ModelDetail.class.getName();
-
+public class ModelOrder {
     /**
      * controller: Order
-     * action: request
+     * action: group
      * @return
      */
-    public int request(String token, int id_user, String status_order, String phone, String delivery_address, String order_date, String desc) {
+    public List<Order> orders(String token, int id_user) {
         String data = "";
         int status = 0;
-        int id_order = 0;
+
+        List<Order> list = new ArrayList<>();
 
         List<HashMap<String, String>> attrs = new ArrayList<>();
 
@@ -34,7 +32,7 @@ public class ModelCheckout {
         attrs.add(attr);
 
         attr = new HashMap<>();
-        attr.put("action", Common.REQUEST);
+        attr.put("action", Common.GROUP);
         attrs.add(attr);
 
         attr = new HashMap<>();
@@ -45,49 +43,30 @@ public class ModelCheckout {
         attr.put("id_user", String.valueOf(id_user));
         attrs.add(attr);
 
-        attr = new HashMap<>();
-        attr.put("status", status_order);
-        attrs.add(attr);
-
-        attr = new HashMap<>();
-        attr.put("phone", phone);
-        attrs.add(attr);
-
-        attr = new HashMap<>();
-        attr.put("delivery_address", delivery_address);
-        attrs.add(attr);
-
-        attr = new HashMap<>();
-        attr.put("order_date", order_date);
-        attrs.add(attr);
-
-        attr = new HashMap<>();
-        attr.put("desc", desc);
-        attrs.add(attr);
-
         ConnectAPI connect = new ConnectAPI(Common.URL_API, attrs);
         connect.execute();
         try {
             data = connect.get().get(0);
-            Log.d(TAG, "store: ");
             status = Integer.parseInt(connect.get().get(1));
-            id_order = ParseHelper.parseOrderId(data, status);
+            list = ParseHelper.parseOrders(data, status);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return id_order;
+        return list;
     }
 
     /**
      * controller: Order
-     * action: store
+     * action: group
      * @return
      */
-    public int store(String token, int id_order, int id_product, int quanity) {
+    public List<OrderDetail> orderDetails(String token, int id_order) {
         String data = "";
         int status = 0;
+
+        List<OrderDetail> list = new ArrayList<>();
 
         List<HashMap<String, String>> attrs = new ArrayList<>();
 
@@ -97,7 +76,7 @@ public class ModelCheckout {
         attrs.add(attr);
 
         attr = new HashMap<>();
-        attr.put("action", Common.STORE);
+        attr.put("action", Common.GROUP_DETAIL);
         attrs.add(attr);
 
         attr = new HashMap<>();
@@ -108,25 +87,17 @@ public class ModelCheckout {
         attr.put("id_order", String.valueOf(id_order));
         attrs.add(attr);
 
-        attr = new HashMap<>();
-        attr.put("id_product", String.valueOf(id_product));
-        attrs.add(attr);
-
-        attr = new HashMap<>();
-        attr.put("quanity", String.valueOf(quanity));
-        attrs.add(attr);
-
         ConnectAPI connect = new ConnectAPI(Common.URL_API, attrs);
         connect.execute();
         try {
             data = connect.get().get(0);
-            Log.d(TAG, "store: ");
             status = Integer.parseInt(connect.get().get(1));
+            list = ParseHelper.parseOrderDetails(data, status);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
-        return status;
+        return list;
     }
 }

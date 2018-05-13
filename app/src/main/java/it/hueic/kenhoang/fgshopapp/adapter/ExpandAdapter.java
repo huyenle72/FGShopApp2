@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.R;
-import it.hueic.kenhoang.fgshopapp.model.product.ModelProduct;
+import it.hueic.kenhoang.fgshopapp.model.ModelProduct;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
 
 public class ExpandAdapter extends BaseExpandableListAdapter {

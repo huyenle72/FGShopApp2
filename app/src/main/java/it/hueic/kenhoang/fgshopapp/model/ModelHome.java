@@ -1,4 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.model.home;
+package it.hueic.kenhoang.fgshopapp.model;
 
 
 import java.util.ArrayList;

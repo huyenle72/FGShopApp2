@@ -5,8 +5,7 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
-import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
-import it.hueic.kenhoang.fgshopapp.object.Product;
+import it.hueic.kenhoang.fgshopapp.model.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.object.Rate;
 import it.hueic.kenhoang.fgshopapp.view.detail.rating.IViewFragmentRating;
 

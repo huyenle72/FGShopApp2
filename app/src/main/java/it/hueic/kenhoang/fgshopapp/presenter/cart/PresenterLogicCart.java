@@ -4,7 +4,7 @@ import android.content.Context;
 
 import java.util.List;
 
-import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
+import it.hueic.kenhoang.fgshopapp.model.ModelCart;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
 import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.view.cart.IViewCart;

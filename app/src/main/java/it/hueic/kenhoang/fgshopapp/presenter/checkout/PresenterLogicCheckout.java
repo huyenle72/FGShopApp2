@@ -5,7 +5,7 @@ import android.content.Context;
 import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
-import it.hueic.kenhoang.fgshopapp.model.checkout.ModelCheckout;
+import it.hueic.kenhoang.fgshopapp.model.ModelCheckout;
 import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.view.checkout.IViewCheckout;
 

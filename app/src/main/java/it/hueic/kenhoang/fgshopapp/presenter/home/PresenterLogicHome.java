@@ -2,11 +2,10 @@ package it.hueic.kenhoang.fgshopapp.presenter.home;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
-import it.hueic.kenhoang.fgshopapp.model.home.ModelHome;
+import it.hueic.kenhoang.fgshopapp.model.ModelCart;
+import it.hueic.kenhoang.fgshopapp.model.ModelHome;
 import it.hueic.kenhoang.fgshopapp.object.Banner;
 import it.hueic.kenhoang.fgshopapp.object.GroupProductType;
 import it.hueic.kenhoang.fgshopapp.view.home.IViewHome;

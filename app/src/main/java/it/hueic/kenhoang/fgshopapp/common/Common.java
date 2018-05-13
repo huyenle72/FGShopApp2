@@ -9,8 +9,8 @@ public class Common {
     //Local of Android emulator 10.0.2.2
     //Local of Android real (You need connect common wifi) - You use local of desktop
     //http://localhost/mvc/FGShop/api.php
-    public static final String SERVER_NAME = "http://10.0.2.2/";
-    public static final String URL = SERVER_NAME + "mvc/FGShop/";
+    public static final String SERVER_NAME = "http://ineovn.000webhostapp.com";
+    public static final String URL = SERVER_NAME + "/";
     public static final String URL_API = URL + "api.php";
     public static final String URL_API_TOKEN = Common.URL_API + "?token=";
     //APIs
@@ -30,6 +30,7 @@ public class Common {
     public static final String REGISTER = "register";
     public static final String EXISTS = "exists";
     public static final String GROUP = "group";
+    public static final String GROUP_DETAIL = "group_detail";
     public static final String REQUEST = "request";
     public static final String DETAIL = "detail";
     public static final String STORE = "store";

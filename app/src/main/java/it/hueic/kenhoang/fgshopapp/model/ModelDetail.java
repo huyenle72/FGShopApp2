@@ -1,4 +1,4 @@
-package it.hueic.kenhoang.fgshopapp.model.detail;
+package it.hueic.kenhoang.fgshopapp.model;
 
 import android.util.Log;
 

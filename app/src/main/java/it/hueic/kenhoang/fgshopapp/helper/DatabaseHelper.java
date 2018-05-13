@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Locale;
 
 import it.hueic.kenhoang.fgshopapp.object.Cart;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 
 public class DatabaseHelper extends SQLiteAssetHelper{
     private static final String DB_NAME = "fgshop";
@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         return flag;
     }
 
-    public List<Order> allCart(int id_user) {
+    public List<OrderDetail> allCart(int id_user) {
         SQLiteDatabase db = getReadableDatabase();
         SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 
@@ -48,26 +48,26 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         qb.setTables(sqlTable);
 
         Cursor cursor = qb.query(db, sqlSelect, "id_user = ?", new String[] {String.valueOf(id_user)}, null, null, null);
-        final List<Order> result = new ArrayList<>();
+        final List<OrderDetail> result = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
-                Order order = new Order();
-                order.setId_user(cursor.getInt(cursor.getColumnIndex(sqlSelect[0])));
-                order.setId_product(cursor.getInt(cursor.getColumnIndex(sqlSelect[1])));
-                order.setQuantity(cursor.getInt(cursor.getColumnIndex(sqlSelect[2])));
-                result.add(order);
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setId_user(cursor.getInt(cursor.getColumnIndex(sqlSelect[0])));
+                orderDetail.setId_product(cursor.getInt(cursor.getColumnIndex(sqlSelect[1])));
+                orderDetail.setQuantity(cursor.getInt(cursor.getColumnIndex(sqlSelect[2])));
+                result.add(orderDetail);
             } while (cursor.moveToNext());
         }
         return result;
     }
 
-    public void saveCart(Order order) {
+    public void saveCart(OrderDetail orderDetail) {
         SQLiteDatabase db = getReadableDatabase();
 
         String query = String.format(Locale.getDefault(), "INSERT OR REPLACE INTO Cart (id_user, id_product, quantity) VALUES (%d, %d, %d);",
-                order.getId_user(),
-                order.getId_product(),
-                order.getQuantity());
+                orderDetail.getId_user(),
+                orderDetail.getId_product(),
+                orderDetail.getQuantity());
         try {
             db.execSQL(query);
         } catch (Exception ex) {
@@ -89,9 +89,9 @@ public class DatabaseHelper extends SQLiteAssetHelper{
         }
     }
 
-    public void updateCart(Order order) {
+    public void updateCart(OrderDetail orderDetail) {
         SQLiteDatabase db = getReadableDatabase();
-        String query = String.format(Locale.getDefault(), "UPDATE Cart SET quantity = %d WHERE id_user = %d AND id_product = %d", order.getQuantity(), order.getId_user(), order.getId_product());
+        String query = String.format(Locale.getDefault(), "UPDATE Cart SET quantity = %d WHERE id_user = %d AND id_product = %d", orderDetail.getQuantity(), orderDetail.getId_user(), orderDetail.getId_product());
         db.execSQL(query);
     }
 

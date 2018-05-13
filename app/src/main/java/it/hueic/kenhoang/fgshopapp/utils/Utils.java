@@ -19,7 +19,9 @@ import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.view.cart.CartActivity;
@@ -161,5 +163,13 @@ public class Utils {
         }
 
         return result;
+    }
+
+    /** Current Time **/
+    public static String currentTime() {
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = df.format(c);
+        return formattedDate;
     }
 }

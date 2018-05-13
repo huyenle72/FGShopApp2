@@ -3,7 +3,6 @@ package it.hueic.kenhoang.fgshopapp.view.detail;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
@@ -29,13 +27,12 @@ import it.hueic.kenhoang.fgshopapp.R;
 import it.hueic.kenhoang.fgshopapp.adapter.ViewPagerAdapterDetail;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.presenter.detail.PresenterLogicDetail;
 import it.hueic.kenhoang.fgshopapp.presenter.detail.commom.PresenterLogicDetailCommom;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.commom.IViewDetailCommom;
-import it.hueic.kenhoang.fgshopapp.view.home.HomeActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -84,11 +81,11 @@ public class DetailActivity extends AppCompatActivity implements
             @Override
             public void onClick(View v) {
                 if (Utils.isLogin()) {
-                    Order order = new Order();
-                    order.setId_user(Common.CURRENT_USER.getId());
-                    order.setId_product(id_product);
-                    order.setQuantity(Integer.parseInt(buttonNumber.getNumber()));
-                    new DatabaseHelper(DetailActivity.this).saveCart(order);
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId_user(Common.CURRENT_USER.getId());
+                    orderDetail.setId_product(id_product);
+                    orderDetail.setQuantity(Integer.parseInt(buttonNumber.getNumber()));
+                    new DatabaseHelper(DetailActivity.this).saveCart(orderDetail);
                     Utils.showToastShort(getApplicationContext(), "Add to cart success!", MDToast.TYPE_SUCCESS);
                 } else {
                     Utils.openLogin(DetailActivity.this);

@@ -329,4 +329,30 @@ public class ParseHelper {
         }
         return message;
     }
+
+    /**
+     * Parse JSON Oreder
+     * @param data
+     * @param status
+     * @return
+     */
+
+    public static int parseOrderId(String data, int status) {
+        int id = 0;
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(data);
+            JSONArray array = jsonObject.getJSONArray(Common.ORDER);
+
+            if (status == 200) {
+                JSONObject value = (JSONObject) array.get(0);
+                id = value.getInt("id");
+            } else if (status == 401){
+                id = 0;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return id;
+    }
 }

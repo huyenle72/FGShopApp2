@@ -22,6 +22,7 @@ public class Common {
     public static final String BANNER = "Banner";
     public static final String RATING = "Rating";
     public static final String FAVORITE = "Favorite";
+    public static final String ORDER = "Order";
     //action
     public static final String INDEX = "index";
     public static final String LOGIN = "login";
@@ -29,6 +30,7 @@ public class Common {
     public static final String REGISTER = "register";
     public static final String EXISTS = "exists";
     public static final String GROUP = "group";
+    public static final String REQUEST = "request";
     public static final String DETAIL = "detail";
     public static final String STORE = "store";
     public static final String CHECK = "check";
@@ -43,6 +45,10 @@ public class Common {
     public static final String USERNAME_KEY = "username";
     public static final String PASSWORD_KEY = "password";
 
+    //DEFAULT STATUS ORDER
+    public static final String PLACED = "PLACED";
+    public static final String SHIPPED = "SHIPPED";
+    public static final String ON_MY_WAY = "ON_MY_WAY";
     //DEFAULT ARRAY
     public static String[] TITLE_FRAGMENT_LOGIN = {
             "Sign In",

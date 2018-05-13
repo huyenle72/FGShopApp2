@@ -6,7 +6,7 @@ import java.util.List;
 
 import it.hueic.kenhoang.fgshopapp.model.cart.ModelCart;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.view.cart.IViewCart;
 
 public class PresenterLogicCart implements IPresenterCart {
@@ -24,8 +24,8 @@ public class PresenterLogicCart implements IPresenterCart {
     }
 
     @Override
-    public void save(Order order) {
-        model.saveCart(order);
+    public void save(OrderDetail orderDetail) {
+        model.saveCart(orderDetail);
     }
 
     @Override

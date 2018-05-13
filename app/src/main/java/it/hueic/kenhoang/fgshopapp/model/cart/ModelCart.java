@@ -8,7 +8,7 @@ import java.util.List;
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
 import it.hueic.kenhoang.fgshopapp.model.detail.ModelDetail;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 
 public class ModelCart {
@@ -22,20 +22,20 @@ public class ModelCart {
         return new DatabaseHelper(context).checkCart(id_user, id_product);
     }
 
-    public List<Order> allCart(int id_user) {
+    public List<OrderDetail> allCart(int id_user) {
         return new DatabaseHelper(context).allCart(id_user);
     }
 
-    public void saveCart(Order order) {
-        new DatabaseHelper(context).saveCart(order);
+    public void saveCart(OrderDetail orderDetail) {
+        new DatabaseHelper(context).saveCart(orderDetail);
     }
 
     public void saveCart(Cart cart) {
         new DatabaseHelper(context).saveCart(cart);
     }
 
-    public void updateCart(Order order) {
-        new DatabaseHelper(context).updateCart(order);
+    public void updateCart(OrderDetail orderDetail) {
+        new DatabaseHelper(context).updateCart(orderDetail);
     }
 
     public void removeAllCart(int id_user) {
@@ -55,21 +55,21 @@ public class ModelCart {
     }
 
     public List<Cart> carts(int id_user) {
-        List<Order> orders = allCart(id_user);
+        List<OrderDetail> orderDetails = allCart(id_user);
         List<Cart> carts = new ArrayList<>();
         ModelDetail modelDetail = new ModelDetail();
-        if (!orders.isEmpty()) {
-            for (Order order: orders) {
+        if (!orderDetails.isEmpty()) {
+            for (OrderDetail orderDetail : orderDetails) {
                 Cart cart = new Cart();
-                cart.setId_product(order.getId_product());
-                cart.setId_user(order.getId_user());
-                cart.setQuantity(order.getQuantity());
+                cart.setId_product(orderDetail.getId_product());
+                cart.setId_user(orderDetail.getId_user());
+                cart.setQuantity(orderDetail.getQuantity());
 
-                Product product = modelDetail.findById(order.getId_product());
+                Product product = modelDetail.findById(orderDetail.getId_product());
                 cart.setName(product.getName_product());
                 cart.setPrice(product.getPrice());
                 cart.setImage(product.getImage());
-                cart.setTotal(order.getQuantity() * Integer.parseInt(product.getPrice()));
+                cart.setTotal(orderDetail.getQuantity() * Integer.parseInt(product.getPrice()));
 
                 carts.add(cart);
             }

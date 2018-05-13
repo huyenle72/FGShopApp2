@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.text.DecimalFormat;
@@ -20,11 +18,10 @@ import it.hueic.kenhoang.fgshopapp.adapter.viewholder.ProductHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.handle.click.IClickItemListener;
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import it.hueic.kenhoang.fgshopapp.view.detail.DetailActivity;
-import it.hueic.kenhoang.fgshopapp.view.product.ProductActivity;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
     Context context;
@@ -60,11 +57,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductHolder> {
             @Override
             public void onClick(View v) {
                 if (Utils.isLogin()) {
-                    Order order = new Order();
-                    order.setId_user(Common.CURRENT_USER.getId());
-                    order.setId_product(object.getId());
-                    order.setQuantity(1);
-                    new DatabaseHelper(context).saveCart(order);
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setId_user(Common.CURRENT_USER.getId());
+                    orderDetail.setId_product(object.getId());
+                    orderDetail.setQuantity(1);
+                    new DatabaseHelper(context).saveCart(orderDetail);
                     Utils.showToastShort(context, "Add to cart success!", MDToast.TYPE_SUCCESS);
                 } else {
                     Utils.openLogin((Activity) context);

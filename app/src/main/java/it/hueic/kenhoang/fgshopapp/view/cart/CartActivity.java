@@ -1,6 +1,7 @@
 package it.hueic.kenhoang.fgshopapp.view.cart;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,10 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -28,11 +26,10 @@ import it.hueic.kenhoang.fgshopapp.adapter.viewholder.CartHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.handle.remove.IRecyclerItemTouch;
 import it.hueic.kenhoang.fgshopapp.handle.remove.RecyclerItemTouchCart;
-import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
-import it.hueic.kenhoang.fgshopapp.object.Order;
 import it.hueic.kenhoang.fgshopapp.presenter.cart.PresenterLogicCart;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
+import it.hueic.kenhoang.fgshopapp.view.checkout.CheckoutActivity;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -84,6 +81,17 @@ public class CartActivity extends AppCompatActivity implements
             @Override
             public void run() {
                 presenterLogicCart.carts(Common.CURRENT_USER.getId());
+            }
+        });
+        btnCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Utils.isLogin()) {
+                    Intent checkoutIntent = new Intent(CartActivity.this, CheckoutActivity.class);
+                    startActivity(checkoutIntent);
+                } else {
+                    Utils.openLogin(CartActivity.this);
+                }
             }
         });
     }
@@ -170,5 +178,12 @@ public class CartActivity extends AppCompatActivity implements
             snackbar.setActionTextColor(Color.YELLOW);
             snackbar.show();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        presenterLogicCart.total(Common.CURRENT_USER.getId());
+        presenterLogicCart.carts(Common.CURRENT_USER.getId());
     }
 }

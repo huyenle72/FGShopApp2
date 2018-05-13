@@ -16,7 +16,7 @@ import it.hueic.kenhoang.fgshopapp.adapter.viewholder.CartHolder;
 import it.hueic.kenhoang.fgshopapp.common.Common;
 import it.hueic.kenhoang.fgshopapp.helper.DatabaseHelper;
 import it.hueic.kenhoang.fgshopapp.object.Cart;
-import it.hueic.kenhoang.fgshopapp.object.Order;
+import it.hueic.kenhoang.fgshopapp.object.OrderDetail;
 import it.hueic.kenhoang.fgshopapp.presenter.cart.PresenterLogicCart;
 import it.hueic.kenhoang.fgshopapp.utils.Utils;
 
@@ -51,11 +51,11 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                 cart.setQuantity(newValue);
                 cart.setTotal(cart.getQuantity() * Integer.parseInt(cart.getPrice()));
 
-                Order order = new Order();
-                order.setId_product(cart.getId_product());
-                order.setId_user(cart.getId_user());
-                order.setQuantity(cart.getQuantity());
-                new DatabaseHelper(context).updateCart(order);
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setId_product(cart.getId_product());
+                orderDetail.setId_user(cart.getId_user());
+                orderDetail.setQuantity(cart.getQuantity());
+                new DatabaseHelper(context).updateCart(orderDetail);
                 holder.price.setText(String.valueOf(numberFormat.format(Integer.valueOf(list.get(position).getTotal())) + " VND"));
                 presenterLogicCart.total(Common.CURRENT_USER.getId());
             }

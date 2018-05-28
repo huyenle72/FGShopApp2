@@ -132,16 +132,11 @@ public class FragmentSignIn extends Fragment implements View.OnClickListener,
 
     private void handleLoginWithText(final String email, final String pass) {
         showDialog();
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (!email.trim().equals("") && !pass.trim().equals(""))
-                    presenterLogicLogin.validateLogin(email, pass);
-                else
-                    Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), "Please fill full information");
-            }
-        }, Common.DELAY_TIME);
+        if (!email.trim().equals("") && !pass.trim().equals(""))
+            presenterLogicLogin.validateLogin(email, pass);
+        else
+            Utils.showSnackBarShort(getView().findViewById(R.id.layoutMainSignIn), "Please fill full information");
+
     }
 
     private void showDialog() {

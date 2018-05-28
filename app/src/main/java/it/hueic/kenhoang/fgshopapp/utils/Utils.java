@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.Snackbar;
 import android.util.Base64;
 import android.util.Log;
@@ -15,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.security.MessageDigest;
@@ -46,10 +49,34 @@ public class Utils {
     }
 
     /** Load image with Picasso **/
-    public static void loadImage(Context context, String path, ImageView target, final ProgressBar progressBar) {
+    public static void loadImage(Context context, String path, final ImageView img, final ProgressBar progressBar) {
+       /* Target target = new Target() {
+
+            @Override
+            public void onPrepareLoad(Drawable arg0) {
+
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onBitmapLoaded(Bitmap arg0, Picasso.LoadedFrom arg1) {
+                img.setImageBitmap(arg0);
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable arg0) {
+                // TODO Auto-generated method stub
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        };
+
         Picasso.with(context)
                 .load(Common.URL + path)
-                .into(target, new Callback() {
+                .into(target);*/
+        Picasso.with(context)
+                .load(Common.URL + path)
+                .into(img, new Callback() {
                     @Override
                     public void onSuccess() {
                         progressBar.setVisibility(View.GONE);

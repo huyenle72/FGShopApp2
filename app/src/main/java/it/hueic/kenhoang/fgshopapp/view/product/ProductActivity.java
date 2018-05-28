@@ -26,6 +26,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ import it.hueic.kenhoang.fgshopapp.handle.loadmore.LoadMoreScroll;
 import it.hueic.kenhoang.fgshopapp.object.Product;
 import it.hueic.kenhoang.fgshopapp.object.ProductType;
 import it.hueic.kenhoang.fgshopapp.presenter.product.PresenterLogicProduct;
+import it.hueic.kenhoang.fgshopapp.utils.Utils;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -193,6 +195,7 @@ public class ProductActivity extends AppCompatActivity implements
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+
         return true;
     }
 

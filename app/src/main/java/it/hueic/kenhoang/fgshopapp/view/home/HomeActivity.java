@@ -228,7 +228,7 @@ public class HomeActivity extends AppCompatActivity implements
                 presenterLogicHome.loadGroupProductTypes();
                 break;
             case R.id.action_search:
-                //handle after
+                Utils.showToastShort(this, "Comming soon", MDToast.TYPE_INFO);
                 break;
         }
         //noinspection SimplifiableIfStatement

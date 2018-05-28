@@ -9,7 +9,8 @@ public class Common {
     //Local of Android emulator 10.0.2.2
     //Local of Android real (You need connect common wifi) - You use local of desktop
     //http://localhost/mvc/FGShop/api.php
-    public static final String SERVER_NAME = "http://ineovn.000webhostapp.com";
+    //http://ineovn.000webhostapp.com (Host test)
+    public static final String SERVER_NAME = "http://10.0.2.2/mvc/FGShop";
     public static final String URL = SERVER_NAME + "/";
     public static final String URL_API = URL + "api.php";
     public static final String URL_API_TOKEN = Common.URL_API + "?token=";

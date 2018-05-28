@@ -64,6 +64,8 @@ public class ParseHelper {
             /* If Login => Unauthorized */
             /* If Register => User is exists */
             user = null;
+        } else {
+            user = null;
         }
         return user;
     }
@@ -135,7 +137,7 @@ public class ParseHelper {
         return list;
     }
 
-    /**xxxx
+    /**
      * Parse JSON ProductType
      * @param data
      * @param status

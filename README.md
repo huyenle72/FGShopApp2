@@ -1,2 +1,2 @@
 # FGShopApp
-This is project android HueIC with PHP Service
+This is project android FPoly DN with PHP Service
